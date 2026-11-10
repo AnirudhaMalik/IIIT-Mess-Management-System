@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" width="240" height="48" fill="none">
+  <!-- Institute Icon Mark -->
+  <rect x="4" y="6" width="36" height="36" rx="4" fill="#172B4D"/>
+  <path d="M12 28V20L22 14L32 20V28L22 34L12 28Z" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M22 23V34" stroke="#FFFFFF" stroke-width="2"/>
+  <circle cx="22" cy="18" r="2" fill="#FFFFFF"/>
+  <!-- Typography -->
+  <text x="48" y="22" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#172B4D" letter-spacing="0.5">IIIT BHUBANESWAR</text>
+  <text x="48" y="36" font-family="'Inter', sans-serif" font-size="11" font-weight="500" fill="#667085" letter-spacing="1">MESS MANAGEMENT</text>
+</svg>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscriptions Management - IIIT Bhubaneswar Mess Admin</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">ADMIN PANEL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Overview & Operations</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./scanner.html" class="nav-item"><span class="nav-icon">📷</span> <span>QR Scanner</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>Menu Management</span></a>
+
+        <div class="nav-section-title">User & Plan Management</div>
+        <a href="./students.html" class="nav-item"><span class="nav-icon">👥</span> <span>Students</span></a>
+        <a href="./plans.html" class="nav-item"><span class="nav-icon">📋</span> <span>Mess Plans</span></a>
+        <a href="./subscriptions.html" class="nav-item active"><span class="nav-icon">💳</span> <span>Subscriptions</span></a>
+        <a href="./payments.html" class="nav-item"><span class="nav-icon">💰</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Communications & Reports</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./announcements.html" class="nav-item"><span class="nav-icon">📢</span> <span>Announcements</span></a>
+        <a href="./reports.html" class="nav-item"><span class="nav-icon">📈</span> <span>Reports</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Mess Subscriptions & Active Memberships</span>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary font-semibold">Admin Panel</span>
+          <div class="user-profile-menu">
+            <div class="avatar-circle">AD</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Administrator</span>
+              <span class="user-role-label">Warden / Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Manage Student Subscriptions</h1>
+            <p class="page-subtitle">Track active dining memberships, extend plan validity, and review payment settlements.</p>
+          </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="card p-16 mb-20">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <div class="flex-1" style="min-width: 260px;">
+              <input type="text" id="subSearchInput" class="form-control" placeholder="Search by student name or roll number...">
+            </div>
+            <div class="d-flex items-center gap-12">
+              <select id="statusFilterSelect" class="form-control" style="width: auto;">
+                <option value="all">All Subscription Statuses</option>
+                <option value="active">Active Only</option>
+                <option value="expired">Expired</option>
+                <option value="pending">Pending Payment</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscriptions Table -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">All Subscriptions</h2>
+            <div class="text-small text-muted" id="subTotalBadge">0 total</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Plan Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminSubsTbody">
+                  <tr><td colspan="7" class="text-center text-muted py-24">Loading subscriptions...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="subsEmptyState" class="empty-state d-none">
+              <div class="empty-state-icon">📋</div>
+              <div class="empty-state-title">No subscriptions found</div>
+              <p class="empty-state-desc">No membership records matched your filter criteria.</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="subsPagination" style="border-top: 1px solid var(--color-border); justify-content: space-between;">
+            <!-- Rendered by Pagination.render -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Extend Subscription Modal -->
+  <div class="modal-backdrop" id="extendModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Extend Subscription Validity</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-small text-secondary mb-16">
+          Add days to the current end date for <strong id="extendStudentName">Student</strong>.
+        </p>
+        <input type="hidden" id="extendSubId">
+        <div class="form-group">
+          <label class="form-label" for="extendDaysInput">Number of Days to Extend <span class="required">*</span></label>
+          <input type="number" id="extendDaysInput" class="form-control" value="7" min="1" max="90" required>
+          <span class="form-hint">E.g. 7 days for semester exam or sick leave extension</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmExtendBtn" class="btn btn-primary">
+          <span>Extend Validity</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Status Modal -->
+  <div class="modal-backdrop" id="statusChangeModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Update Subscription Status</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="statusSubId">
+        <div class="form-group">
+          <label class="form-label" for="newStatusSelect">Select New Status</label>
+          <select id="newStatusSelect" class="form-control">
+            <option value="active">Active (Eligible for meals)</option>
+            <option value="expired">Expired</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="pending">Pending Verification</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+        <button type="button" id="confirmStatusChangeBtn" class="btn btn-primary">
+          <span>Apply Status</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/pagination.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('admin');
+
+      let currentPage = 1;
+      const limit = 10;
+      let searchQuery = '';
+      let filterStatus = 'all';
+      let subsCache = [];
+
+      const tbody = document.getElementById('adminSubsTbody');
+      const emptyState = document.getElementById('subsEmptyState');
+      const totalBadge = document.getElementById('subTotalBadge');
+      const paginationContainer = document.getElementById('subsPagination');
+      const extendModal = helpers.setupModal('extendModal');
+      const statusModal = helpers.setupModal('statusChangeModal');
+
+      // Search & Filter
+      document.getElementById('subSearchInput').addEventListener('input', helpers.debounce((e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        currentPage = 1;
+        loadSubscriptions();
+      }, 300));
+
+      document.getElementById('statusFilterSelect').addEventListener('change', (e) => {
+        filterStatus = e.target.value;
+        currentPage = 1;
+        loadSubscriptions();
+      });
+
+      async function loadSubscriptions() {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-24">Loading subscriptions...</td></tr>`;
+        emptyState.classList.add('d-none');
+
+        const params = {
+          page: currentPage,
+          limit,
+          search: searchQuery,
+          status: filterStatus !== 'all' ? filterStatus : undefined
+        };
+
+        try {
+          const res = await api.get('/subscriptions', params);
+          const subs = res.data || (Array.isArray(res) ? res : res.subscriptions || []);
+          const totalItems = res.total || res.totalRecords || subs.length;
+          const totalPages = Math.ceil(totalItems / limit) || 1;
+
+          subsCache = subs;
+          totalBadge.textContent = `${totalItems} subscriptions`;
+
+          if (subs.length === 0) {
+            tbody.innerHTML = '';
+            emptyState.classList.remove('d-none');
+            paginationContainer.innerHTML = '';
+            return;
+          }
+
+          let html = '';
+          subs.forEach(s => {
+            const id = s.id || s._id;
+            const studentName = s.studentName || (s.student && s.student.name) || 'Student';
+            const studentId = s.studentRoll || (s.student && s.student.studentId) || '-';
+            const planName = s.planName || (s.plan && s.plan.name) || 'Mess Plan';
+            const sDate = helpers.formatDate(s.startDate);
+            const eDate = helpers.formatDate(s.endDate);
+            const statusClass = helpers.getStatusClass(s.status);
+            const paymentText = s.paymentStatus || (s.amount ? `${helpers.formatCurrency(s.amount)} (Paid)` : 'Verified');
+
+            html += `
+              <tr>
+                <td>
+                  <div class="font-semibold text-primary">${studentName}</div>
+                  <code class="text-small">${studentId}</code>
+                </td>
+                <td class="font-medium">${planName}</td>
+                <td class="text-small text-muted">${sDate}</td>
+                <td class="text-small font-medium">${eDate}</td>
+                <td><span class="badge ${statusClass}">${helpers.capitalize(s.status)}</span></td>
+                <td class="text-small">${paymentText}</td>
+                <td>
+                  <div class="d-flex gap-6">
+                    <button class="btn btn-outline btn-sm action-extend" data-id="${id}" data-name="${studentName}">Extend</button>
+                    <button class="btn btn-outline btn-sm action-status" data-id="${id}" data-status="${s.status}">Status</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+
+          tbody.innerHTML = html;
+
+          // Wire Actions
+          tbody.querySelectorAll('.action-extend').forEach(btn => {
+            btn.addEventListener('click', () => {
+              document.getElementById('extendSubId').value = btn.dataset.id;
+              document.getElementById('extendStudentName').textContent = btn.dataset.name;
+              extendModal.open();
+            });
+          });
+
+          tbody.querySelectorAll('.action-status').forEach(btn => {
+            btn.addEventListener('click', () => {
+              document.getElementById('statusSubId').value = btn.dataset.id;
+              document.getElementById('newStatusSelect').value = btn.dataset.status || 'active';
+              statusModal.open();
+            });
+          });
+
+          // Pagination
+          Pagination.render(paginationContainer, {
+            currentPage,
+            totalPages,
+            totalItems,
+            limit,
+            onPageChange: (newPage) => {
+              currentPage = newPage;
+              loadSubscriptions();
+            }
+          });
+
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-24">Failed to load subscriptions.</td></tr>`;
+          paginationContainer.innerHTML = '';
+        }
+      }
+
+      // Confirm Extend
+      document.getElementById('confirmExtendBtn').addEventListener('click', async () => {
+        const id = document.getElementById('extendSubId').value;
+        const days = Number(document.getElementById('extendDaysInput').value);
+
+        if (!days || days < 1) {
+          showToast('Please specify valid days to extend.', 'warning');
+          return;
+        }
+
+        try {
+          await api.post(`/subscriptions/${id}/extend`, { days });
+          showToast(`Subscription extended by ${days} days.`, 'success');
+          extendModal.close();
+          loadSubscriptions();
+        } catch (e) {
+          showToast(e.message || 'Failed to extend subscription.', 'error');
+        }
+      });
+
+      // Confirm Status Change
+      document.getElementById('confirmStatusChangeBtn').addEventListener('click', async () => {
+        const id = document.getElementById('statusSubId').value;
+        const status = document.getElementById('newStatusSelect').value;
+
+        try {
+          await api.patch(`/subscriptions/${id}/status`, { status });
+          showToast(`Status updated to ${status}.`, 'success');
+          statusModal.close();
+          loadSubscriptions();
+        } catch (e) {
+          showToast(e.message || 'Failed to update status.', 'error');
+        }
+      });
+
+      loadSubscriptions();
+    });
+  </script>
+</body>
+</html>

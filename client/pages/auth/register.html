@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration - IIIT Bhubaneswar Mess Portal</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="auth-page">
+    <!-- Left Hero / Brand Panel -->
+    <div class="auth-panel-left">
+      <div>
+        <div class="auth-brand-logo">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="4" fill="#FFFFFF"/>
+            <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#172B4D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M20 21V32" stroke="#172B4D" stroke-width="2.5"/>
+            <circle cx="20" cy="16" r="2.5" fill="#172B4D"/>
+          </svg>
+          <div>
+            <h3 style="color: #FFFFFF; margin: 0; font-size: 18px; font-weight: 700;">IIIT BHUBANESWAR</h3>
+            <p style="color: #94a3b8; margin: 0; font-size: 11px; font-weight: 500;">STUDENT MESS ONBOARDING</p>
+          </div>
+        </div>
+
+        <h1 class="auth-hero-title">Join the Digital Mess Ecosystem</h1>
+        <p class="auth-hero-desc">
+          Register with your institutional student identity to subscribe to meal plans, access digital QR passes, and track dietary schedules.
+        </p>
+
+        <ul class="auth-features-list">
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Seamless hostel allocation mapping</span>
+          </li>
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Immediate QR token generation on plan activation</span>
+          </li>
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Transparent mess billing and attendance history</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="auth-copyright">
+        &copy; 2026 IIIT Bhubaneswar. Central Dining Authority.
+      </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-panel-right">
+      <div class="auth-form-container" style="max-width: 520px; padding: 20px 0;">
+        <div class="mb-20">
+          <h2 class="font-bold text-primary" style="font-size: 22px;">Create Student Account</h2>
+          <p class="text-muted">Enter your university and hostel details below to create an account.</p>
+        </div>
+
+        <div id="registerAlert" class="demo-banner d-none" style="background-color: rgba(214, 69, 69, 0.1); border-color: var(--color-error); color: var(--color-error); margin-bottom: 16px;">
+          <span id="registerAlertText"></span>
+        </div>
+
+        <form id="registerForm" novalidate>
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="groupName">
+              <label class="form-label" for="name">Full Name <span class="required">*</span></label>
+              <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+              <div class="form-error">Please enter your full name.</div>
+            </div>
+
+            <div class="form-group flex-1" id="groupStudentId">
+              <label class="form-label" for="studentId">Student ID / Roll No <span class="required">*</span></label>
+              <input type="text" id="studentId" name="studentId" class="form-control" placeholder="e.g. B121045" required>
+              <div class="form-error">Student ID is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="groupEmail">
+              <label class="form-label" for="email">Institutional Email <span class="required">*</span></label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="e.g. student@iiitbbs.ac.in" required>
+              <div class="form-error">Valid institutional email is required.</div>
+            </div>
+
+            <div class="form-group flex-1" id="groupPhone">
+              <label class="form-label" for="phone">Phone Number <span class="required">*</span></label>
+              <input type="tel" id="phone" name="phone" class="form-control" placeholder="e.g. 9876543210" required>
+              <div class="form-error">Valid 10-digit phone number is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="groupHostel">
+              <label class="form-label" for="hostel">Hostel Block <span class="required">*</span></label>
+              <select id="hostel" name="hostel" class="form-control" required>
+                <option value="">Select Hostel</option>
+                <option value="Boys Hostel 1 (BH1)">Boys Hostel 1 (BH1)</option>
+                <option value="Boys Hostel 2 (BH2)">Boys Hostel 2 (BH2)</option>
+                <option value="Boys Hostel 3 (BH3)">Boys Hostel 3 (BH3)</option>
+                <option value="Girls Hostel 1 (GH1)">Girls Hostel 1 (GH1)</option>
+                <option value="Girls Hostel 2 (GH2)">Girls Hostel 2 (GH2)</option>
+              </select>
+              <div class="form-error">Please select your hostel block.</div>
+            </div>
+
+            <div class="form-group flex-1" id="groupRoomNumber">
+              <label class="form-label" for="roomNumber">Room Number <span class="required">*</span></label>
+              <input type="text" id="roomNumber" name="roomNumber" class="form-control" placeholder="e.g. A-304" required>
+              <div class="form-error">Room number is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="groupPassword">
+              <label class="form-label" for="password">Password <span class="required">*</span></label>
+              <input type="password" id="password" name="password" class="form-control" placeholder="At least 6 characters" required>
+              <div class="form-error">Password must be at least 6 characters.</div>
+            </div>
+
+            <div class="form-group flex-1" id="groupConfirmPassword">
+              <label class="form-label" for="confirmPassword">Confirm Password <span class="required">*</span></label>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Re-enter password" required>
+              <div class="form-error">Passwords must match.</div>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary w-100 mt-8" style="height: 40px;">
+            <span id="btnText">Create Account</span>
+            <div id="btnSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+          </button>
+        </form>
+
+        <div class="text-center mt-20">
+          <span class="text-muted" style="font-size: 13px;">Already have an account?</span>
+          <a href="./login.html" class="font-semibold text-primary ml-1" style="font-size: 13px;"> Sign in here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registerForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const registerAlert = document.getElementById('registerAlert');
+      const registerAlertText = document.getElementById('registerAlertText');
+
+      function clearErrors() {
+        document.querySelectorAll('.form-group').forEach(fg => fg.classList.remove('has-error'));
+        registerAlert.classList.add('d-none');
+      }
+
+      function setLoading(isLoading) {
+        if (isLoading) {
+          submitBtn.disabled = true;
+          btnText.textContent = 'Registering...';
+          btnSpinner.classList.remove('d-none');
+        } else {
+          submitBtn.disabled = false;
+          btnText.textContent = 'Create Account';
+          btnSpinner.classList.add('d-none');
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const name = document.getElementById('name').value.trim();
+        const studentId = document.getElementById('studentId').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const hostel = document.getElementById('hostel').value.trim();
+        const roomNumber = document.getElementById('roomNumber').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        let hasError = false;
+
+        if (!name) {
+          document.getElementById('groupName').classList.add('has-error');
+          hasError = true;
+        }
+        if (!studentId) {
+          document.getElementById('groupStudentId').classList.add('has-error');
+          hasError = true;
+        }
+        if (!email || !email.includes('@')) {
+          document.getElementById('groupEmail').classList.add('has-error');
+          hasError = true;
+        }
+        if (!phone || phone.length < 10) {
+          document.getElementById('groupPhone').classList.add('has-error');
+          hasError = true;
+        }
+        if (!hostel) {
+          document.getElementById('groupHostel').classList.add('has-error');
+          hasError = true;
+        }
+        if (!roomNumber) {
+          document.getElementById('groupRoomNumber').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password || password.length < 6) {
+          document.getElementById('groupPassword').classList.add('has-error');
+          hasError = true;
+        }
+        if (password !== confirmPassword) {
+          document.getElementById('groupConfirmPassword').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        setLoading(true);
+
+        try {
+          const payload = {
+            name,
+            studentId,
+            email,
+            phone,
+            hostel,
+            roomNumber,
+            password
+          };
+
+          await api.post('/auth/register', payload);
+
+          showToast('Registration successful! Redirecting to login...', 'success', 2000);
+
+          setTimeout(() => {
+            window.location.href = './login.html';
+          }, 1500);
+
+        } catch (err) {
+          setLoading(false);
+          const msg = err.message || 'Registration failed. Please check details and try again.';
+          registerAlertText.textContent = msg;
+          registerAlert.classList.remove('d-none');
+          showToast(msg, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

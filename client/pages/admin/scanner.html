@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Scanner & Turnstile - IIIT Bhubaneswar Mess Admin</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+  <!-- html5-qrcode library from unpkg CDN -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">ADMIN PANEL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Overview & Operations</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./scanner.html" class="nav-item active"><span class="nav-icon">📷</span> <span>QR Scanner</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>Menu Management</span></a>
+
+        <div class="nav-section-title">User & Plan Management</div>
+        <a href="./students.html" class="nav-item"><span class="nav-icon">👥</span> <span>Students</span></a>
+        <a href="./plans.html" class="nav-item"><span class="nav-icon">📋</span> <span>Mess Plans</span></a>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">💳</span> <span>Subscriptions</span></a>
+        <a href="./payments.html" class="nav-item"><span class="nav-icon">💰</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Communications & Reports</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./announcements.html" class="nav-item"><span class="nav-icon">📢</span> <span>Announcements</span></a>
+        <a href="./reports.html" class="nav-item"><span class="nav-icon">📈</span> <span>Reports</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Dining Counter QR Scanner & Meal Verification</span>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary font-semibold">Counter Station 1</span>
+          <div class="user-profile-menu">
+            <div class="avatar-circle">AD</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Mess Supervisor</span>
+              <span class="user-role-label">Turnstile Desk</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <!-- Meal Type Selector at Top -->
+        <div class="card p-16 mb-20" style="background-color: var(--color-primary); color: #FFFFFF; border: none;">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <div>
+              <h2 class="h3" style="color: #FFFFFF; margin-bottom: 2px;">Active Service Session</h2>
+              <p class="text-small m-0" style="color: var(--color-primary-light);">
+                Select the meal slot currently served at this counter before scanning:
+              </p>
+            </div>
+            <div class="d-flex gap-8 flex-wrap">
+              <button class="btn btn-outline meal-session-btn active" data-meal="breakfast" style="background: #FFFFFF; color: var(--color-primary);">
+                <span>🌅</span> <span>Breakfast</span>
+              </button>
+              <button class="btn btn-outline meal-session-btn" data-meal="lunch" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+                <span>☀️</span> <span>Lunch</span>
+              </button>
+              <button class="btn btn-outline meal-session-btn" data-meal="snacks" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+                <span>☕</span> <span>Snacks</span>
+              </button>
+              <button class="btn btn-outline meal-session-btn" data-meal="dinner" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+                <span>🌙</span> <span>Dinner</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scanner Grid: Left camera scanner, Right verification result & manual lookup -->
+        <div class="scanner-grid mb-24">
+          <!-- Left: Optical Camera Box -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Camera Feed & Optical Recognition</h2>
+              <div class="d-flex gap-8">
+                <button id="startScanBtn" class="btn btn-success btn-sm">
+                  <span>▶</span> <span>Start Scanner</span>
+                </button>
+                <button id="stopScanBtn" class="btn btn-outline btn-sm is-disabled" disabled>
+                  <span>■</span> <span>Stop Scanner</span>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="scanner-viewport-box" id="scannerViewport">
+                <div id="reader" style="width: 100%;"></div>
+                <div id="cameraPlaceholder" class="text-center p-24">
+                  <div style="font-size: 40px; margin-bottom: 8px;">📷</div>
+                  <div class="font-semibold mb-4">Camera Inactive</div>
+                  <div class="text-small" style="color: #94a3b8;">Click 'Start Scanner' above to activate counter webcam.</div>
+                </div>
+              </div>
+              <div class="text-small text-muted mt-8 text-center">
+                Point student's phone screen or print pass at the lens. Auto-detects in real time.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Verification Result Panel + Manual Fallback -->
+          <div class="d-flex flex-col gap-20">
+            <!-- Verification Result Card -->
+            <div class="scanner-result-card" id="resultCard">
+              <div class="text-center py-20" id="resultCardDefault">
+                <div style="font-size: 36px; margin-bottom: 8px;">⏳</div>
+                <h3 class="mb-4">Ready for Verification</h3>
+                <p class="text-small text-muted m-0">Awaiting QR scan or manual roll number entry.</p>
+              </div>
+
+              <!-- Success State -->
+              <div id="resultCardSuccess" class="d-none">
+                <div class="d-flex items-center gap-12 mb-12">
+                  <div class="avatar-circle" style="background-color: var(--color-success); font-size: 20px;">✓</div>
+                  <div>
+                    <h2 class="h2 mb-0 text-success" style="font-size: 18px;">Meal Verified Successfully</h2>
+                    <span class="text-small text-muted" id="resSuccessTimestamp">Timestamp</span>
+                  </div>
+                </div>
+                <div class="p-12 bg-light border rounded mb-12" style="font-size: 13.5px;">
+                  <div class="d-flex justify-between mb-4">
+                    <span class="text-muted">Student Name:</span>
+                    <strong class="text-primary" id="resStudentName">-</strong>
+                  </div>
+                  <div class="d-flex justify-between mb-4">
+                    <span class="text-muted">Student Roll No:</span>
+                    <code id="resStudentId">-</code>
+                  </div>
+                  <div class="d-flex justify-between mb-4">
+                    <span class="text-muted">Meal Type:</span>
+                    <span class="font-semibold" id="resMealType">-</span>
+                  </div>
+                  <div class="d-flex justify-between">
+                    <span class="text-muted">Subscription Status:</span>
+                    <span class="badge badge-success">Active & Eligible</span>
+                  </div>
+                </div>
+                <div class="text-success font-medium text-small text-center">
+                  ✅ Turnstile Admission Granted. Recorded to database.
+                </div>
+              </div>
+
+              <!-- Error State -->
+              <div id="resultCardError" class="d-none">
+                <div class="d-flex items-center gap-12 mb-12">
+                  <div class="avatar-circle" style="background-color: var(--color-error); font-size: 20px;">✕</div>
+                  <div>
+                    <h2 class="h2 mb-0 text-error" style="font-size: 18px;">Verification Declined</h2>
+                    <span class="text-small text-muted" id="resErrorTimestamp">Timestamp</span>
+                  </div>
+                </div>
+                <div class="p-12 border rounded mb-12" style="background-color: rgba(214, 69, 69, 0.08); border-color: var(--color-error);">
+                  <div class="font-bold text-error mb-4" id="resErrorMessage">Already consumed this meal</div>
+                  <div class="text-small text-secondary" id="resErrorDetail">
+                    Student has already checked in for this meal cycle or has an expired meal subscription.
+                  </div>
+                </div>
+                <div class="text-error font-medium text-small text-center">
+                  ⛔ Entry prohibited. Direct student to mess warden office.
+                </div>
+              </div>
+            </div>
+
+            <!-- Manual Lookup Fallback -->
+            <div class="card p-16" style="margin: 0;">
+              <h3 class="card-title mb-8" style="font-size: 14px;">Manual Student Roll Lookup</h3>
+              <p class="text-small text-muted mb-12">If student's screen is broken or battery dead, enter student ID manually:</p>
+              <form id="manualVerifyForm" class="d-flex gap-8">
+                <input type="text" id="manualStudentIdInput" class="form-control flex-1" placeholder="e.g. 2200001" required>
+                <button type="submit" id="manualVerifyBtn" class="btn btn-primary" style="white-space: nowrap;">
+                  <span>Verify</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Scans Log (Last 10) -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Live Admissions Log (Last 10 Scans)</h2>
+            <div class="text-small text-muted" id="scansCountBadge">0 recorded today</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Roll / ID</th>
+                    <th>Meal Type</th>
+                    <th>Scan Time</th>
+                    <th>Verification Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentScansTbody">
+                  <tr><td colspan="5" class="text-center text-muted py-20">No scans logged in this station session.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('admin');
+
+      let selectedMeal = 'breakfast';
+      let html5QrCode = null;
+      let isScanning = false;
+      const recentScans = [];
+
+      // Determine default meal slot based on current time
+      const hour = new Date().getHours();
+      if (hour >= 11 && hour < 16) selectedMeal = 'lunch';
+      else if (hour >= 16 && hour < 19) selectedMeal = 'snacks';
+      else if (hour >= 19 || hour < 4) selectedMeal = 'dinner';
+      else selectedMeal = 'breakfast';
+
+      // Meal button selection
+      const mealButtons = document.querySelectorAll('.meal-session-btn');
+      function updateActiveMealBtn() {
+        mealButtons.forEach(btn => {
+          if (btn.dataset.meal === selectedMeal) {
+            btn.style.background = '#FFFFFF';
+            btn.style.color = 'var(--color-primary)';
+          } else {
+            btn.style.background = 'transparent';
+            btn.style.color = '#FFFFFF';
+            btn.style.borderColor = 'rgba(255,255,255,0.4)';
+          }
+        });
+      }
+      updateActiveMealBtn();
+
+      mealButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedMeal = btn.dataset.meal;
+          updateActiveMealBtn();
+          showToast(`Active scan session changed to ${helpers.capitalize(selectedMeal)}`, 'info');
+        });
+      });
+
+      // Scanner Elements
+      const startScanBtn = document.getElementById('startScanBtn');
+      const stopScanBtn = document.getElementById('stopScanBtn');
+      const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+      const resultCard = document.getElementById('resultCard');
+      const resultCardDefault = document.getElementById('resultCardDefault');
+      const resultCardSuccess = document.getElementById('resultCardSuccess');
+      const resultCardError = document.getElementById('resultCardError');
+      const scansTbody = document.getElementById('recentScansTbody');
+      const scansCountBadge = document.getElementById('scansCountBadge');
+
+      startScanBtn.addEventListener('click', startScanner);
+      stopScanBtn.addEventListener('click', stopScanner);
+
+      async function startScanner() {
+        if (!window.Html5Qrcode) {
+          showToast('QR Scanner library not loaded. Check internet connection.', 'error');
+          return;
+        }
+
+        try {
+          html5QrCode = new Html5Qrcode('reader');
+          cameraPlaceholder.classList.add('d-none');
+
+          const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+          await html5QrCode.start(
+            { facingMode: 'environment' },
+            config,
+            onScanSuccess,
+            (errorMessage) => {
+              // Parse errors are expected while searching frames
+            }
+          );
+
+          isScanning = true;
+          startScanBtn.disabled = true;
+          startScanBtn.classList.add('is-disabled');
+          stopScanBtn.disabled = false;
+          stopScanBtn.classList.remove('is-disabled');
+          showToast('Scanner activated.', 'success');
+
+        } catch (err) {
+          showToast('Unable to access camera: ' + err, 'error');
+          cameraPlaceholder.classList.remove('d-none');
+        }
+      }
+
+      async function stopScanner() {
+        if (html5QrCode && isScanning) {
+          try {
+            await html5QrCode.stop();
+            html5QrCode.clear();
+          } catch (_) {}
+          isScanning = false;
+        }
+        cameraPlaceholder.classList.remove('d-none');
+        startScanBtn.disabled = false;
+        startScanBtn.classList.remove('is-disabled');
+        stopScanBtn.disabled = true;
+        stopScanBtn.classList.add('is-disabled');
+      }
+
+      let scanThrottle = false;
+      async function onScanSuccess(decodedText) {
+        if (scanThrottle) return;
+        scanThrottle = true;
+        setTimeout(() => { scanThrottle = false; }, 2000);
+
+        verifyAttendance({ token: decodedText, mealType: selectedMeal });
+      }
+
+      // Manual Lookup Form
+      document.getElementById('manualVerifyForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const studentId = document.getElementById('manualStudentIdInput').value.trim();
+        if (!studentId) return;
+        verifyAttendance({ studentId, mealType: selectedMeal });
+      });
+
+      async function verifyAttendance(payload) {
+        showToast('Verifying scan...', 'info', 800);
+
+        let isSuccess = false;
+        let responseData = null;
+        let errorMsg = '';
+
+        try {
+          // Attempt POST /attendance/scan or /attendance/verify
+          let res;
+          try {
+            res = await api.post('/attendance/scan', payload);
+          } catch (e1) {
+            res = await api.post('/attendance/verify', payload);
+          }
+
+          responseData = res.data || res;
+          isSuccess = true;
+
+        } catch (err) {
+          errorMsg = err.message || 'Invalid QR code or unverified meal pass.';
+          isSuccess = false;
+        }
+
+        renderVerificationResult(isSuccess, responseData, errorMsg, payload);
+      }
+
+      function renderVerificationResult(isSuccess, data, errorMsg, originalPayload) {
+        resultCard.classList.remove('success-border', 'error-border');
+        resultCardDefault.classList.add('d-none');
+        resultCardSuccess.classList.add('d-none');
+        resultCardError.classList.add('d-none');
+
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        if (isSuccess) {
+          resultCard.classList.add('success-border');
+          resultCardSuccess.classList.remove('d-none');
+
+          const sName = (data && (data.studentName || (data.student && data.student.name))) || 'Student Verified';
+          const sId = (data && (data.studentId || (data.student && data.student.studentId))) || originalPayload.studentId || 'STD';
+          const mType = helpers.capitalize(selectedMeal);
+
+          document.getElementById('resStudentName').textContent = sName;
+          document.getElementById('resStudentId').textContent = sId;
+          document.getElementById('resMealType').textContent = mType;
+          document.getElementById('resSuccessTimestamp').textContent = timeStr;
+
+          addScanRecord({
+            name: sName,
+            studentId: sId,
+            mealType: mType,
+            time: timeStr,
+            status: 'Success'
+          });
+
+          showToast(`Admitted: ${sName} (${mType})`, 'success');
+
+        } else {
+          resultCard.classList.add('error-border');
+          resultCardError.classList.remove('d-none');
+
+          document.getElementById('resErrorMessage').textContent = errorMsg;
+          document.getElementById('resErrorTimestamp').textContent = timeStr;
+
+          addScanRecord({
+            name: 'Verification Declined',
+            studentId: originalPayload.studentId || (originalPayload.token ? originalPayload.token.substring(0, 10) : 'QR Pass'),
+            mealType: helpers.capitalize(selectedMeal),
+            time: timeStr,
+            status: 'Declined'
+          });
+
+          showToast(errorMsg, 'error');
+        }
+      }
+
+      function addScanRecord(rec) {
+        recentScans.unshift(rec);
+        if (recentScans.length > 10) recentScans.pop();
+
+        scansCountBadge.textContent = `${recentScans.length} scans this session`;
+
+        let html = '';
+        recentScans.forEach(r => {
+          const isOk = r.status === 'Success';
+          html += `
+            <tr>
+              <td class="font-medium">${r.name}</td>
+              <td><code>${r.studentId}</code></td>
+              <td>${helpers.getMealIcon(r.mealType)} ${r.mealType}</td>
+              <td class="text-muted text-small">${r.time}</td>
+              <td><span class="badge ${isOk ? 'badge-success' : 'badge-error'}">${r.status}</span></td>
+            </tr>
+          `;
+        });
+
+        scansTbody.innerHTML = html;
+      }
+    });
+  </script>
+</body>
+</html>

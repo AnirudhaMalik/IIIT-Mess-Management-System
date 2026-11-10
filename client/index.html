@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IIIT Bhubaneswar - Mess Management System</title>
+  <link rel="stylesheet" href="./assets/css/design-system.css">
+  <link rel="stylesheet" href="./assets/css/components.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;  
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="d-flex flex-col items-center gap-16">
+    <div class="spinner"></div>
+    <div>
+      <h2 class="text-primary font-bold">IIIT Bhubaneswar</h2>
+      <p class="text-secondary font-medium">Redirecting to Mess Portal...</p>
+    </div>
+  </div>
+
+  <script src="./assets/js/services/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (Auth.isAuthenticated()) {
+        Auth.redirectByRole();
+      } else {
+        window.location.href = './pages/auth/login.html';
+      }
+    });
+  </script>
+</body>
+</html>

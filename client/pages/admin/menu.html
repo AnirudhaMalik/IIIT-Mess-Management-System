@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Management - IIIT Bhubaneswar Mess Admin</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">ADMIN PANEL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Overview & Operations</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./scanner.html" class="nav-item"><span class="nav-icon">📷</span> <span>QR Scanner</span></a>
+        <a href="./menu.html" class="nav-item active"><span class="nav-icon">🍽️</span> <span>Menu Management</span></a>
+
+        <div class="nav-section-title">User & Plan Management</div>
+        <a href="./students.html" class="nav-item"><span class="nav-icon">👥</span> <span>Students</span></a>
+        <a href="./plans.html" class="nav-item"><span class="nav-icon">📋</span> <span>Mess Plans</span></a>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">💳</span> <span>Subscriptions</span></a>
+        <a href="./payments.html" class="nav-item"><span class="nav-icon">💰</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Communications & Reports</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./announcements.html" class="nav-item"><span class="nav-icon">📢</span> <span>Announcements</span></a>
+        <a href="./reports.html" class="nav-item"><span class="nav-icon">📈</span> <span>Reports</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Catering & Dietary Menu Editor</span>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary font-semibold">Admin Panel</span>
+          <div class="user-profile-menu">
+            <div class="avatar-circle">AD</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Administrator</span>
+              <span class="user-role-label">Warden / Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Weekly Menu Schedule</h1>
+            <p class="page-subtitle">Publish breakfast, lunch, snacks, and dinner schedules across the 7 days of the week.</p>
+          </div>
+          <div>
+            <button id="addMenuBtn" class="btn btn-primary">
+              <span>+</span> <span>Schedule Meal Slot</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Week Navigator -->
+        <div class="week-navigator mb-20">
+          <button class="btn btn-outline btn-sm" id="prevWeekBtn">&larr; Previous Week</button>
+          <div class="week-display" id="weekRangeDisplay">Loading Week...</div>
+          <button class="btn btn-outline btn-sm" id="nextWeekBtn">Next Week &rarr;</button>
+        </div>
+
+        <!-- 7-Day Matrix Columns -->
+        <div class="menu-matrix-grid" id="menuMatrixContainer">
+          <!-- 7 day columns loaded by JS -->
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Add / Edit Menu Modal -->
+  <div class="modal-backdrop" id="menuModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="menuModalTitle">Schedule Meal Menu</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="menuForm" novalidate>
+          <input type="hidden" id="menuFormId">
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1">
+              <label class="form-label" for="menuDateInput">Date <span class="required">*</span></label>
+              <input type="date" id="menuDateInput" class="form-control" required>
+            </div>
+            <div class="form-group flex-1">
+              <label class="form-label" for="menuMealTypeSelect">Meal Type <span class="required">*</span></label>
+              <select id="menuMealTypeSelect" class="form-control" required>
+                <option value="breakfast">🌅 Breakfast</option>
+                <option value="lunch">☀️ Lunch</option>
+                <option value="snacks">☕ Evening Snacks</option>
+                <option value="dinner">🌙 Dinner</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="menuTimingInput">Serving Hours / Timing</label>
+            <input type="text" id="menuTimingInput" class="form-control" placeholder="e.g. 7:30 AM - 9:30 AM">
+          </div>
+
+          <!-- Dynamic Food Items -->
+          <div class="form-group">
+            <div class="form-label">
+              <span>Food Dishes & Items <span class="required">*</span></span>
+              <button type="button" id="addItemRowBtn" class="btn btn-outline btn-sm">+ Add Item</button>
+            </div>
+            <div id="itemsContainer" class="d-flex flex-col gap-8 mt-6">
+              <!-- Item rows injected here -->
+            </div>
+          </div>
+
+          <div class="d-flex gap-16 items-center p-12 bg-light border rounded mb-16">
+            <label class="form-checkbox">
+              <input type="checkbox" id="menuIsSpecialInput">
+              <span class="font-semibold text-primary">Special Feast / Festival Meal</span>
+            </label>
+          </div>
+
+          <div class="form-group d-none" id="specialNoteGroup">
+            <label class="form-label" for="menuSpecialNoteInput">Special Feast Note</label>
+            <input type="text" id="menuSpecialNoteInput" class="form-control" placeholder="e.g. Diwali Sweets & Paneer Butter Masala included">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+        <button type="button" id="saveMenuBtn" class="btn btn-primary">
+          <span id="saveMenuText">Save Meal Schedule</span>
+          <div id="saveMenuSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('admin');
+
+      let currentMonday = getMonday(new Date());
+      const weekRangeDisplay = document.getElementById('weekRangeDisplay');
+      const matrixContainer = document.getElementById('menuMatrixContainer');
+      const menuModal = helpers.setupModal('menuModal');
+      const itemsContainer = document.getElementById('itemsContainer');
+      const isSpecialCheckbox = document.getElementById('menuIsSpecialInput');
+      const specialNoteGroup = document.getElementById('specialNoteGroup');
+
+      let currentWeekMenuData = [];
+
+      isSpecialCheckbox.addEventListener('change', () => {
+        if (isSpecialCheckbox.checked) {
+          specialNoteGroup.classList.remove('d-none');
+        } else {
+          specialNoteGroup.classList.add('d-none');
+        }
+      });
+
+      document.getElementById('prevWeekBtn').addEventListener('click', () => {
+        currentMonday.setDate(currentMonday.getDate() - 7);
+        renderWeekMatrix();
+      });
+
+      document.getElementById('nextWeekBtn').addEventListener('click', () => {
+        currentMonday.setDate(currentMonday.getDate() + 7);
+        renderWeekMatrix();
+      });
+
+      document.getElementById('addMenuBtn').addEventListener('click', () => {
+        openMenuModal(null, helpers.formatDateForInput(new Date()), 'lunch');
+      });
+
+      document.getElementById('addItemRowBtn').addEventListener('click', () => {
+        addItemRow();
+      });
+
+      function getMonday(d) {
+        const date = new Date(d);
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(date.setDate(diff));
+      }
+
+      function addItemRow(name = '', isVeg = true) {
+        const row = document.createElement('div');
+        row.className = 'd-flex items-center gap-12 item-row';
+        row.innerHTML = `
+          <input type="text" class="form-control flex-1 item-name-input" value="${name}" placeholder="Dish name (e.g. Masala Dosa, Dal Makhani)" required>
+          <label class="form-checkbox" style="white-space: nowrap;">
+            <input type="checkbox" class="item-isveg-input" ${isVeg ? 'checked' : ''}>
+            <span class="text-small font-medium">Veg</span>
+          </label>
+          <button type="button" class="btn btn-outline btn-icon btn-sm remove-item-btn" title="Remove Dish">✕</button>
+        `;
+        row.querySelector('.remove-item-btn').addEventListener('click', () => row.remove());
+        itemsContainer.appendChild(row);
+      }
+
+      async function renderWeekMatrix() {
+        const weekEnd = new Date(currentMonday);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        weekRangeDisplay.textContent = `${helpers.formatDate(currentMonday)} – ${helpers.formatDate(weekEnd)}`;
+
+        matrixContainer.innerHTML = '<div class="text-center py-24 text-muted" style="grid-column: 1 / -1;"><div class="spinner"></div></div>';
+
+        // Fetch menu for the week
+        const startStr = helpers.formatDateForInput(currentMonday);
+        const endStr = helpers.formatDateForInput(weekEnd);
+
+        try {
+          const res = await api.get('/menu', { startDate: startStr, endDate: endStr });
+          currentWeekMenuData = res.data || (Array.isArray(res) ? res : []);
+        } catch (_) {
+          currentWeekMenuData = [];
+        }
+
+        matrixContainer.innerHTML = '';
+        const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const mealSlots = [
+          { type: 'breakfast', label: 'Breakfast', icon: '🌅' },
+          { type: 'lunch', label: 'Lunch', icon: '☀️' },
+          { type: 'snacks', label: 'Snacks', icon: '☕' },
+          { type: 'dinner', label: 'Dinner', icon: '🌙' }
+        ];
+
+        for (let i = 0; i < 7; i++) {
+          const dayDate = new Date(currentMonday);
+          dayDate.setDate(dayDate.getDate() + i);
+          const dateStr = helpers.formatDateForInput(dayDate);
+          const isToday = dateStr === helpers.formatDateForInput(new Date());
+
+          const col = document.createElement('div');
+          col.className = 'matrix-day-col';
+          col.innerHTML = `
+            <div class="matrix-day-header ${isToday ? 'bg-primary text-white' : ''}">
+              <div class="font-bold text-small">${dayNames[i]}</div>
+              <div class="text-small" style="opacity: 0.85;">${helpers.formatDate(dayDate)}</div>
+            </div>
+            <div class="matrix-slots-body"></div>
+          `;
+
+          const slotsBody = col.querySelector('.matrix-slots-body');
+
+          mealSlots.forEach(slot => {
+            const menuEntry = currentWeekMenuData.find(m => {
+              const mDate = helpers.formatDateForInput(m.date);
+              const mType = (m.mealType || m.type || '').toLowerCase();
+              return mDate === dateStr && mType === slot.type;
+            });
+
+            const slotCard = document.createElement('div');
+            slotCard.className = 'matrix-slot-card';
+
+            if (menuEntry && menuEntry.items && menuEntry.items.length > 0) {
+              const itemsList = menuEntry.items.map(it => typeof it === 'string' ? it : it.name).slice(0, 3).join(', ');
+              const moreCount = menuEntry.items.length > 3 ? ` +${menuEntry.items.length - 3} more` : '';
+
+              slotCard.innerHTML = `
+                <div>
+                  <div class="d-flex justify-between items-center mb-4">
+                    <span class="font-semibold text-small">${slot.icon} ${slot.label}</span>
+                    <button class="btn btn-outline btn-sm btn-icon edit-slot-btn" title="Edit Schedule">✏️</button>
+                  </div>
+                  <div class="text-small text-secondary" style="font-size: 11.5px; line-height: 1.3;">
+                    ${itemsList}${moreCount}
+                  </div>
+                </div>
+                ${menuEntry.isSpecial ? `<span class="badge badge-warning mt-4" style="font-size: 10px;">Feast</span>` : ''}
+              `;
+            } else {
+              slotCard.innerHTML = `
+                <div>
+                  <div class="d-flex justify-between items-center mb-4">
+                    <span class="font-semibold text-small text-muted">${slot.icon} ${slot.label}</span>
+                    <button class="btn btn-outline btn-sm btn-icon edit-slot-btn" title="Add Menu">+</button>
+                  </div>
+                  <div class="text-small text-muted" style="font-size: 11px; font-style: italic;">Not scheduled</div>
+                </div>
+              `;
+            }
+
+            slotCard.querySelector('.edit-slot-btn').addEventListener('click', () => {
+              openMenuModal(menuEntry, dateStr, slot.type);
+            });
+
+            slotsBody.appendChild(slotCard);
+          });
+
+          matrixContainer.appendChild(col);
+        }
+      }
+
+      function openMenuModal(entry, dateStr, mealType) {
+        document.getElementById('menuForm').reset();
+        itemsContainer.innerHTML = '';
+
+        if (entry) {
+          document.getElementById('menuFormId').value = entry.id || entry._id || '';
+          document.getElementById('menuDateInput').value = helpers.formatDateForInput(entry.date);
+          document.getElementById('menuMealTypeSelect').value = (entry.mealType || entry.type || '').toLowerCase();
+          document.getElementById('menuTimingInput').value = entry.timing || helpers.getMealTiming(entry.mealType);
+          isSpecialCheckbox.checked = !!entry.isSpecial;
+          document.getElementById('menuSpecialNoteInput').value = entry.specialNote || '';
+          if (entry.isSpecial) specialNoteGroup.classList.remove('d-none');
+
+          (entry.items || []).forEach(it => {
+            const name = typeof it === 'string' ? it : it.name;
+            const isVeg = typeof it === 'object' ? it.isVeg !== false : true;
+            addItemRow(name, isVeg);
+          });
+        } else {
+          document.getElementById('menuFormId').value = '';
+          document.getElementById('menuDateInput').value = dateStr;
+          document.getElementById('menuMealTypeSelect').value = mealType;
+          document.getElementById('menuTimingInput').value = helpers.getMealTiming(mealType);
+          isSpecialCheckbox.checked = false;
+          specialNoteGroup.classList.add('d-none');
+          addItemRow('', true);
+          addItemRow('', true);
+        }
+
+        document.getElementById('menuModalTitle').textContent = entry ? 'Edit Meal Schedule' : 'Schedule Meal Slot';
+        menuModal.open();
+      }
+
+      // Save Menu Slot
+      const saveMenuBtn = document.getElementById('saveMenuBtn');
+      const saveMenuText = document.getElementById('saveMenuText');
+      const saveMenuSpinner = document.getElementById('saveMenuSpinner');
+
+      saveMenuBtn.addEventListener('click', async () => {
+        const id = document.getElementById('menuFormId').value;
+        const date = document.getElementById('menuDateInput').value;
+        const mealType = document.getElementById('menuMealTypeSelect').value;
+        const timing = document.getElementById('menuTimingInput').value.trim();
+        const isSpecial = isSpecialCheckbox.checked;
+        const specialNote = document.getElementById('menuSpecialNoteInput').value.trim();
+
+        const itemRows = itemsContainer.querySelectorAll('.item-row');
+        const items = [];
+        itemRows.forEach(row => {
+          const name = row.querySelector('.item-name-input').value.trim();
+          const isVeg = row.querySelector('.item-isveg-input').checked;
+          if (name) {
+            items.push({ name, isVeg });
+          }
+        });
+
+        if (!date || !mealType || items.length === 0) {
+          showToast('Please specify a date, meal type, and at least one dish item.', 'warning');
+          return;
+        }
+
+        saveMenuBtn.disabled = true;
+        saveMenuText.textContent = 'Saving...';
+        saveMenuSpinner.classList.remove('d-none');
+
+        const payload = {
+          date,
+          mealType,
+          timing,
+          items,
+          isSpecial,
+          specialNote: isSpecial ? specialNote : ''
+        };
+
+        try {
+          if (id) {
+            await api.put(`/menu/${id}`, payload);
+            showToast('Meal schedule updated.', 'success');
+          } else {
+            await api.post('/menu', payload);
+            showToast('New meal schedule saved.', 'success');
+          }
+
+          menuModal.close();
+          renderWeekMatrix();
+        } catch (err) {
+          showToast(err.message || 'Failed to save menu schedule.', 'error');
+        } finally {
+          saveMenuBtn.disabled = false;
+          saveMenuText.textContent = 'Save Meal Schedule';
+          saveMenuSpinner.classList.add('d-none');
+        }
+      });
+
+      renderWeekMatrix();
+    });
+  </script>
+</body>
+</html>

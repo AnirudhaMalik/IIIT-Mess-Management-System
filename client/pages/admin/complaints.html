@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grievance Management - IIIT Bhubaneswar Mess Admin</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">ADMIN PANEL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Overview & Operations</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./scanner.html" class="nav-item"><span class="nav-icon">📷</span> <span>QR Scanner</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>Menu Management</span></a>
+
+        <div class="nav-section-title">User & Plan Management</div>
+        <a href="./students.html" class="nav-item"><span class="nav-icon">👥</span> <span>Students</span></a>
+        <a href="./plans.html" class="nav-item"><span class="nav-icon">📋</span> <span>Mess Plans</span></a>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">💳</span> <span>Subscriptions</span></a>
+        <a href="./payments.html" class="nav-item"><span class="nav-icon">💰</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Communications & Reports</div>
+        <a href="./complaints.html" class="nav-item active"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./announcements.html" class="nav-item"><span class="nav-icon">📢</span> <span>Announcements</span></a>
+        <a href="./reports.html" class="nav-item"><span class="nav-icon">📈</span> <span>Reports</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Mess Complaints & Grievance Redressal</span>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary font-semibold">Admin Panel</span>
+          <div class="user-profile-menu">
+            <div class="avatar-circle">AD</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Administrator</span>
+              <span class="user-role-label">Warden / Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dietary Grievances & Quality Redressal</h1>
+            <p class="page-subtitle">Review student feedback on catering, food quality, hygiene, and issue formal responses.</p>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="card p-16 mb-20">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <div class="flex-1" style="min-width: 240px;">
+              <input type="text" id="compSearchInput" class="form-control" placeholder="Search grievance description or student name...">
+            </div>
+
+            <div class="d-flex items-center gap-12 flex-wrap">
+              <select id="compCategoryFilter" class="form-control" style="width: auto;">
+                <option value="all">All Categories</option>
+                <option value="Food Quality">Food Quality / Taste</option>
+                <option value="Hygiene & Sanitation">Hygiene & Sanitation</option>
+                <option value="Portion Size">Portion Size</option>
+                <option value="Staff Behavior">Staff Behavior</option>
+                <option value="Dietary Preference">Dietary / Segregation</option>
+                <option value="Timing & Service">Timing & Service</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <select id="compStatusFilter" class="form-control" style="width: auto;">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="under_review">Under Review</option>
+                <option value="resolved">Resolved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complaints Table -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Registered Grievances</h2>
+            <div class="text-small text-muted" id="compCountBadge">0 complaints</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Date Filed</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminComplaintsTbody">
+                  <tr><td colspan="6" class="text-center text-muted py-24">Loading complaints...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="compEmptyState" class="empty-state d-none">
+              <div class="empty-state-icon">💬</div>
+              <div class="empty-state-title">No complaints found</div>
+              <p class="empty-state-desc">There are no grievances matching your active filter criteria.</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="compPagination" style="border-top: 1px solid var(--color-border); justify-content: space-between;">
+            <!-- Rendered by Pagination.render -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Respond Modal -->
+  <div class="modal-backdrop" id="respondModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Address Dietary Grievance</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="respondComplaintId">
+
+        <!-- Complaint Info Display -->
+        <div class="card bg-light p-16 mb-20" style="border: 1px solid var(--color-border);">
+          <div class="d-flex justify-between items-center mb-8">
+            <span class="font-bold text-primary" id="modalStudentTitle">Student Name (Roll)</span>
+            <span class="badge" id="modalCategoryBadge">Category</span>
+          </div>
+          <div class="text-small text-muted mb-8" id="modalFiledDate">Filed on: -</div>
+          <div class="text-secondary" style="font-size: 14px; white-space: pre-wrap;" id="modalDescription">Description text...</div>
+          <div id="modalImagesContainer" class="d-flex gap-8 flex-wrap mt-12"></div>
+        </div>
+
+        <form id="respondForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="respondStatusSelect">Updated Status <span class="required">*</span></label>
+            <select id="respondStatusSelect" class="form-control" required>
+              <option value="under_review">Under Review (Inspecting with mess vendor)</option>
+              <option value="resolved">Resolved (Action taken / issue rectified)</option>
+              <option value="rejected">Rejected (Unsubstantiated / out of scope)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="responseTextarea">Official Response to Student <span class="required">*</span></label>
+            <textarea id="responseTextarea" class="form-control" placeholder="Explain the findings and corrective actions taken..." required></textarea>
+            <span class="form-hint">This response will be visible on the student's portal.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="internalNoteTextarea">Internal Committee Note (Optional)</label>
+            <textarea id="internalNoteTextarea" class="form-control" placeholder="Private note for mess committee records only..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+        <button type="button" id="saveResponseBtn" class="btn btn-primary">
+          <span id="saveResponseText">Submit Resolution</span>
+          <div id="saveResponseSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/pagination.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('admin');
+
+      let currentPage = 1;
+      const limit = 10;
+      let searchQuery = '';
+      let filterCategory = 'all';
+      let filterStatus = 'all';
+      let compCache = [];
+
+      const tbody = document.getElementById('adminComplaintsTbody');
+      const emptyState = document.getElementById('compEmptyState');
+      const countBadge = document.getElementById('compCountBadge');
+      const paginationContainer = document.getElementById('compPagination');
+      const respondModal = helpers.setupModal('respondModal');
+
+      // Filters
+      document.getElementById('compSearchInput').addEventListener('input', helpers.debounce((e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        currentPage = 1;
+        loadComplaints();
+      }, 300));
+
+      document.getElementById('compCategoryFilter').addEventListener('change', (e) => {
+        filterCategory = e.target.value;
+        currentPage = 1;
+        loadComplaints();
+      });
+
+      document.getElementById('compStatusFilter').addEventListener('change', (e) => {
+        filterStatus = e.target.value;
+        currentPage = 1;
+        loadComplaints();
+      });
+
+      async function loadComplaints() {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-24">Loading complaints...</td></tr>`;
+        emptyState.classList.add('d-none');
+
+        const params = {
+          page: currentPage,
+          limit,
+          search: searchQuery,
+          category: filterCategory !== 'all' ? filterCategory : undefined,
+          status: filterStatus !== 'all' ? filterStatus : undefined
+        };
+
+        try {
+          const res = await api.get('/complaints', params);
+          const complaints = res.data || (Array.isArray(res) ? res : res.complaints || []);
+          const totalItems = res.total || res.totalRecords || complaints.length;
+          const totalPages = Math.ceil(totalItems / limit) || 1;
+
+          compCache = complaints;
+          countBadge.textContent = `${totalItems} total complaints`;
+
+          if (complaints.length === 0) {
+            tbody.innerHTML = '';
+            emptyState.classList.remove('d-none');
+            paginationContainer.innerHTML = '';
+            return;
+          }
+
+          let html = '';
+          complaints.forEach(c => {
+            const id = c.id || c._id;
+            const studentName = c.studentName || (c.student && c.student.name) || 'Student';
+            const studentId = c.studentRoll || (c.student && c.student.studentId) || '-';
+            const category = c.category || 'General';
+            const desc = (c.description || '').substring(0, 80) + ((c.description || '').length > 80 ? '...' : '');
+            const status = c.status || 'pending';
+            const statusClass = helpers.getStatusClass(status);
+            const date = helpers.formatDate(c.createdAt || c.date || new Date());
+
+            html += `
+              <tr>
+                <td>
+                  <div class="font-medium text-primary">${studentName}</div>
+                  <code class="text-small text-muted">${studentId}</code>
+                </td>
+                <td class="font-medium">${category}</td>
+                <td class="text-secondary text-small" style="max-width: 280px;">${desc}</td>
+                <td><span class="badge ${statusClass}">${helpers.capitalize(status.replace('_', ' '))}</span></td>
+                <td class="text-muted text-small">${date}</td>
+                <td>
+                  <button class="btn btn-outline btn-sm action-respond" data-comp='${JSON.stringify(c)}'>
+                    Respond
+                  </button>
+                </td>
+              </tr>
+            `;
+          });
+
+          tbody.innerHTML = html;
+
+          tbody.querySelectorAll('.action-respond').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const comp = JSON.parse(btn.dataset.comp);
+              openRespondModal(comp);
+            });
+          });
+
+          // Pagination
+          Pagination.render(paginationContainer, {
+            currentPage,
+            totalPages,
+            totalItems,
+            limit,
+            onPageChange: (newPage) => {
+              currentPage = newPage;
+              loadComplaints();
+            }
+          });
+
+        } catch (e) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-24">Failed to load complaints.</td></tr>`;
+          paginationContainer.innerHTML = '';
+        }
+      }
+
+      function openRespondModal(c) {
+        const id = c.id || c._id;
+        const studentName = c.studentName || (c.student && c.student.name) || 'Student';
+        const studentId = c.studentRoll || (c.student && c.student.studentId) || '';
+
+        document.getElementById('respondComplaintId').value = id;
+        document.getElementById('modalStudentTitle').textContent = `${studentName} ${studentId ? `(${studentId})` : ''}`;
+        document.getElementById('modalCategoryBadge').textContent = c.category || 'General';
+        document.getElementById('modalFiledDate').textContent = `Filed on: ${helpers.formatDateTime(c.createdAt || c.date || new Date())}`;
+        document.getElementById('modalDescription').textContent = c.description;
+
+        document.getElementById('respondStatusSelect').value = c.status === 'pending' ? 'under_review' : c.status;
+        document.getElementById('responseTextarea').value = c.adminResponse || '';
+        document.getElementById('internalNoteTextarea').value = c.internalNote || '';
+
+        // Render photos if present
+        const imgBox = document.getElementById('modalImagesContainer');
+        imgBox.innerHTML = '';
+        if (c.images && c.images.length > 0) {
+          c.images.forEach(src => {
+            imgBox.innerHTML += `
+              <a href="${src}" target="_blank" rel="noopener">
+                <img src="${src}" alt="Evidence" style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+              </a>
+            `;
+          });
+        }
+
+        respondModal.open();
+      }
+
+      // Save Response Submit
+      const saveBtn = document.getElementById('saveResponseBtn');
+      const saveText = document.getElementById('saveResponseText');
+      const saveSpinner = document.getElementById('saveResponseSpinner');
+
+      saveBtn.addEventListener('click', async () => {
+        const id = document.getElementById('respondComplaintId').value;
+        const status = document.getElementById('respondStatusSelect').value;
+        const adminResponse = document.getElementById('responseTextarea').value.trim();
+        const internalNote = document.getElementById('internalNoteTextarea').value.trim();
+
+        if (!adminResponse) {
+          showToast('Please provide an official response for the student.', 'warning');
+          return;
+        }
+
+        saveBtn.disabled = true;
+        saveText.textContent = 'Submitting...';
+        saveSpinner.classList.remove('d-none');
+
+        const payload = { status, adminResponse, internalNote };
+
+        try {
+          await api.put(`/complaints/${id}/respond`, payload);
+
+          showToast('Grievance response updated and student notified.', 'success');
+          respondModal.close();
+          loadComplaints();
+        } catch (err) {
+          showToast(err.message || 'Failed to submit response.', 'error');
+        } finally {
+          saveBtn.disabled = false;
+          saveText.textContent = 'Submit Resolution';
+          saveSpinner.classList.add('d-none');
+        }
+      });
+
+      loadComplaints();
+    });
+  </script>
+</body>
+</html>

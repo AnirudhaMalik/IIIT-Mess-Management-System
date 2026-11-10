@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory - IIIT Bhubaneswar Mess Admin</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">ADMIN PANEL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Overview & Operations</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./scanner.html" class="nav-item"><span class="nav-icon">📷</span> <span>QR Scanner</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>Menu Management</span></a>
+
+        <div class="nav-section-title">User & Plan Management</div>
+        <a href="./students.html" class="nav-item active"><span class="nav-icon">👥</span> <span>Students</span></a>
+        <a href="./plans.html" class="nav-item"><span class="nav-icon">📋</span> <span>Mess Plans</span></a>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">💳</span> <span>Subscriptions</span></a>
+        <a href="./payments.html" class="nav-item"><span class="nav-icon">💰</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Communications & Reports</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./announcements.html" class="nav-item"><span class="nav-icon">📢</span> <span>Announcements</span></a>
+        <a href="./reports.html" class="nav-item"><span class="nav-icon">📈</span> <span>Reports</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Student Directory & Hostel Allocations</span>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-primary font-semibold">Admin Panel</span>
+          <div class="user-profile-menu">
+            <div class="avatar-circle">AD</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Administrator</span>
+              <span class="user-role-label">Warden / Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Registered Students</h1>
+            <p class="page-subtitle">Inspect hostel resident dining rosters, account active statuses, and meal passes.</p>
+          </div>
+          <div>
+            <button id="addStudentBtn" class="btn btn-primary">
+              <span>+</span> <span>Add New Student</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="card p-16 mb-20">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <!-- Search -->
+            <div class="flex-1" style="min-width: 260px;">
+              <input type="text" id="searchInput" class="form-control" placeholder="Search by student name, roll number, or email...">
+            </div>
+
+            <!-- Filters -->
+            <div class="d-flex items-center gap-12 flex-wrap">
+              <select id="hostelFilter" class="form-control" style="width: auto;">
+                <option value="">All Hostels</option>
+                <option value="BH1">Boys Hostel 1 (BH1)</option>
+                <option value="BH2">Boys Hostel 2 (BH2)</option>
+                <option value="BH3">Boys Hostel 3 (BH3)</option>
+                <option value="GH1">Girls Hostel 1 (GH1)</option>
+                <option value="GH2">Girls Hostel 2 (GH2)</option>
+              </select>
+
+              <select id="subStatusFilter" class="form-control" style="width: auto;">
+                <option value="">All Subscriptions</option>
+                <option value="active">Active Plan</option>
+                <option value="none">No Active Plan</option>
+              </select>
+
+              <select id="accountStatusFilter" class="form-control" style="width: auto;">
+                <option value="">All Account Statuses</option>
+                <option value="active">Active Accounts</option>
+                <option value="inactive">Suspended / Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Enrolled Students</h2>
+            <div class="text-small text-muted" id="studentsTotalCount">0 students</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>Email</th>
+                    <th>Hostel</th>
+                    <th>Room</th>
+                    <th>Subscription</th>
+                    <th>Account Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTbody">
+                  <tr><td colspan="8" class="text-center text-muted py-24">Loading students directory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="studentsEmptyState" class="empty-state d-none">
+              <div class="empty-state-icon">👥</div>
+              <div class="empty-state-title">No students found</div>
+              <p class="empty-state-desc">No students match your search or filter options.</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="studentsPagination" style="border-top: 1px solid var(--color-border); justify-content: space-between;">
+            <!-- Rendered by Pagination.render -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Add / Edit Student Modal -->
+  <div class="modal-backdrop" id="studentModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="studentModalTitle">Add New Student</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="studentForm" novalidate>
+          <input type="hidden" id="studentFormId">
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="fgName">
+              <label class="form-label" for="formName">Full Name <span class="required">*</span></label>
+              <input type="text" id="formName" class="form-control" placeholder="e.g. Aditi Mohanty" required>
+              <div class="form-error">Name is required.</div>
+            </div>
+            <div class="form-group flex-1" id="fgStudentId">
+              <label class="form-label" for="formStudentId">Student ID / Roll <span class="required">*</span></label>
+              <input type="text" id="formStudentId" class="form-control" placeholder="e.g. 2200005" required>
+              <div class="form-error">Student ID is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="fgEmail">
+              <label class="form-label" for="formEmail">Email Address <span class="required">*</span></label>
+              <input type="email" id="formEmail" class="form-control" placeholder="e.g. 2200005@iiitbbs.ac.in" required>
+              <div class="form-error">Valid institutional email required.</div>
+            </div>
+            <div class="form-group flex-1" id="fgPhone">
+              <label class="form-label" for="formPhone">Phone Number <span class="required">*</span></label>
+              <input type="tel" id="formPhone" class="form-control" placeholder="e.g. 9876543210" required>
+              <div class="form-error">Phone is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-16">
+            <div class="form-group flex-1" id="fgHostel">
+              <label class="form-label" for="formHostel">Hostel Block <span class="required">*</span></label>
+              <select id="formHostel" class="form-control" required>
+                <option value="Boys Hostel 1 (BH1)">Boys Hostel 1 (BH1)</option>
+                <option value="Boys Hostel 2 (BH2)">Boys Hostel 2 (BH2)</option>
+                <option value="Boys Hostel 3 (BH3)">Boys Hostel 3 (BH3)</option>
+                <option value="Girls Hostel 1 (GH1)">Girls Hostel 1 (GH1)</option>
+                <option value="Girls Hostel 2 (GH2)">Girls Hostel 2 (GH2)</option>
+              </select>
+            </div>
+            <div class="form-group flex-1" id="fgRoom">
+              <label class="form-label" for="formRoom">Room Number <span class="required">*</span></label>
+              <input type="text" id="formRoom" class="form-control" placeholder="e.g. B-210" required>
+              <div class="form-error">Room number is required.</div>
+            </div>
+          </div>
+
+          <div class="form-group" id="fgPassword">
+            <label class="form-label" for="formPassword">Initial Password <span class="required" id="pwRequiredStar">*</span></label>
+            <input type="password" id="formPassword" class="form-control" placeholder="Default: Student@123">
+            <span class="form-hint">Leave blank when editing to keep current password.</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Cancel</button>
+        <button type="button" id="saveStudentBtn" class="btn btn-primary">
+          <span id="saveStudentText">Save Student</span>
+          <div id="saveStudentSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Details & Subscription History Modal -->
+  <div class="modal-backdrop" id="viewStudentModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Student Profile & Dining Ledger</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="viewStudentBody">
+        <!-- Injected -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/pagination.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('admin');
+
+      let currentPage = 1;
+      const limit = 10;
+      let searchQuery = '';
+      let filterHostel = '';
+      let filterSubStatus = '';
+      let filterAccStatus = '';
+      let studentsCache = [];
+
+      const studentsTbody = document.getElementById('studentsTbody');
+      const studentsEmptyState = document.getElementById('studentsEmptyState');
+      const studentsTotalCount = document.getElementById('studentsTotalCount');
+      const studentsPagination = document.getElementById('studentsPagination');
+      const studentModal = helpers.setupModal('studentModal');
+      const viewModal = helpers.setupModal('viewStudentModal');
+
+      // Search & Filters
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', helpers.debounce((e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        currentPage = 1;
+        loadStudents();
+      }, 300));
+
+      document.getElementById('hostelFilter').addEventListener('change', (e) => {
+        filterHostel = e.target.value;
+        currentPage = 1;
+        loadStudents();
+      });
+
+      document.getElementById('subStatusFilter').addEventListener('change', (e) => {
+        filterSubStatus = e.target.value;
+        currentPage = 1;
+        loadStudents();
+      });
+
+      document.getElementById('accountStatusFilter').addEventListener('change', (e) => {
+        filterAccStatus = e.target.value;
+        currentPage = 1;
+        loadStudents();
+      });
+
+      // Add Student Button
+      document.getElementById('addStudentBtn').addEventListener('click', () => {
+        document.getElementById('studentForm').reset();
+        document.getElementById('studentFormId').value = '';
+        document.getElementById('studentModalTitle').textContent = 'Add New Student';
+        document.getElementById('pwRequiredStar').style.display = 'inline';
+        studentModal.open();
+      });
+
+      async function loadStudents() {
+        studentsTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-24">Loading student records...</td></tr>`;
+        studentsEmptyState.classList.add('d-none');
+
+        const params = {
+          page: currentPage,
+          limit,
+          search: searchQuery,
+          hostel: filterHostel,
+          subStatus: filterSubStatus,
+          status: filterAccStatus
+        };
+
+        try {
+          const res = await api.get('/students', params);
+          const students = res.data || (Array.isArray(res) ? res : res.students || []);
+          const totalItems = res.total || res.totalRecords || students.length;
+          const totalPages = Math.ceil(totalItems / limit) || 1;
+
+          studentsCache = students;
+          studentsTotalCount.textContent = `${totalItems} registered students`;
+
+          if (students.length === 0) {
+            studentsTbody.innerHTML = '';
+            studentsEmptyState.classList.remove('d-none');
+            studentsPagination.innerHTML = '';
+            return;
+          }
+
+          let html = '';
+          students.forEach(s => {
+            const id = s.id || s._id;
+            const hasSub = s.activeSubscription || s.hasActiveSubscription || s.subscriptionStatus === 'active';
+            const isActive = s.isActive !== false && s.status !== 'inactive';
+
+            html += `
+              <tr>
+                <td class="font-semibold text-primary">${s.name}</td>
+                <td><code>${s.studentId || '-'}</code></td>
+                <td class="text-secondary">${s.email}</td>
+                <td>${s.hostel || '-'}</td>
+                <td>${s.roomNumber || '-'}</td>
+                <td>
+                  <span class="badge ${hasSub ? 'badge-success' : 'badge-secondary'}">
+                    ${hasSub ? 'Active Plan' : 'No Plan'}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge ${isActive ? 'badge-success' : 'badge-error'}">
+                    ${isActive ? 'Active' : 'Suspended'}
+                  </span>
+                </td>
+                <td>
+                  <div class="d-flex gap-6">
+                    <button class="btn btn-outline btn-sm action-view" data-id="${id}" title="View Details">View</button>
+                    <button class="btn btn-outline btn-sm action-edit" data-id="${id}" title="Edit Student">Edit</button>
+                    <button class="btn btn-outline btn-sm action-toggle" data-id="${id}" data-active="${isActive}" title="Toggle Status">
+                      ${isActive ? 'Suspend' : 'Activate'}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+
+          studentsTbody.innerHTML = html;
+
+          // Wire actions
+          studentsTbody.querySelectorAll('.action-view').forEach(btn => {
+            btn.addEventListener('click', () => viewStudent(btn.dataset.id));
+          });
+
+          studentsTbody.querySelectorAll('.action-edit').forEach(btn => {
+            btn.addEventListener('click', () => editStudent(btn.dataset.id));
+          });
+
+          studentsTbody.querySelectorAll('.action-toggle').forEach(btn => {
+            btn.addEventListener('click', () => toggleStudentStatus(btn.dataset.id, btn.dataset.active === 'true'));
+          });
+
+          // Pagination
+          Pagination.render(studentsPagination, {
+            currentPage,
+            totalPages,
+            totalItems,
+            limit,
+            onPageChange: (newPage) => {
+              currentPage = newPage;
+              loadStudents();
+            }
+          });
+
+        } catch (err) {
+          studentsTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-24">Failed to load students.</td></tr>`;
+          studentsPagination.innerHTML = '';
+        }
+      }
+
+      async function viewStudent(id) {
+        const student = studentsCache.find(s => (s.id || s._id) === id);
+        if (!student) return;
+
+        const body = document.getElementById('viewStudentBody');
+        body.innerHTML = `
+          <div class="d-flex items-center gap-16 mb-20 p-16 bg-light border rounded">
+            <div class="avatar-circle" style="width: 56px; height: 56px; font-size: 20px;">${helpers.getInitials(student.name)}</div>
+            <div>
+              <h2 class="h2 mb-4">${student.name}</h2>
+              <div class="text-muted">Student Roll: <strong>${student.studentId}</strong> &bull; ${student.email}</div>
+              <div class="text-small text-secondary mt-4">Hostel: ${student.hostel} | Room: ${student.roomNumber} | Phone: ${student.phone || '-'}</div>
+            </div>
+          </div>
+
+          <h3 class="mb-12">Dining Subscription History</h3>
+          <div class="table-container mb-16">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="studentSubHistoryTbody">
+                <tr><td colspan="4" class="text-center text-muted py-16">Loading subscriptions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        viewModal.open();
+
+        try {
+          const res = await api.get(`/subscriptions`, { studentId: id });
+          const subs = res.data || (Array.isArray(res) ? res : []);
+          const histTbody = document.getElementById('studentSubHistoryTbody');
+
+          if (subs.length === 0) {
+            histTbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-16">No subscription history on record.</td></tr>`;
+          } else {
+            let histHtml = '';
+            subs.forEach(sub => {
+              histHtml += `
+                <tr>
+                  <td class="font-medium">${sub.planName || 'Meal Plan'}</td>
+                  <td>${helpers.formatDate(sub.startDate)}</td>
+                  <td>${helpers.formatDate(sub.endDate)}</td>
+                  <td><span class="badge ${helpers.getStatusClass(sub.status)}">${helpers.capitalize(sub.status)}</span></td>
+                </tr>
+              `;
+            });
+            histTbody.innerHTML = histHtml;
+          }
+        } catch (_) {
+          document.getElementById('studentSubHistoryTbody').innerHTML = `<tr><td colspan="4" class="text-center text-muted py-16">No subscription data.</td></tr>`;
+        }
+      }
+
+      function editStudent(id) {
+        const student = studentsCache.find(s => (s.id || s._id) === id);
+        if (!student) return;
+
+        document.getElementById('studentFormId').value = id;
+        document.getElementById('formName').value = student.name || '';
+        document.getElementById('formStudentId').value = student.studentId || '';
+        document.getElementById('formEmail').value = student.email || '';
+        document.getElementById('formPhone').value = student.phone || '';
+        document.getElementById('formHostel').value = student.hostel || 'Boys Hostel 1 (BH1)';
+        document.getElementById('formRoom').value = student.roomNumber || '';
+        document.getElementById('formPassword').value = '';
+        document.getElementById('pwRequiredStar').style.display = 'none';
+
+        document.getElementById('studentModalTitle').textContent = 'Edit Student Details';
+        studentModal.open();
+      }
+
+      async function toggleStudentStatus(id, currentActive) {
+        const action = currentActive ? 'suspend' : 'activate';
+        if (!confirm(`Are you sure you want to ${action} this student account?`)) return;
+
+        try {
+          await api.patch(`/students/${id}/status`, { isActive: !currentActive });
+          showToast(`Student account ${action}d successfully.`, 'success');
+          loadStudents();
+        } catch (err) {
+          showToast(err.message || 'Failed to update student status.', 'error');
+        }
+      }
+
+      // Save Student Form Submit
+      const saveStudentBtn = document.getElementById('saveStudentBtn');
+      const saveStudentText = document.getElementById('saveStudentText');
+      const saveStudentSpinner = document.getElementById('saveStudentSpinner');
+
+      saveStudentBtn.addEventListener('click', async () => {
+        const id = document.getElementById('studentFormId').value;
+        const name = document.getElementById('formName').value.trim();
+        const studentId = document.getElementById('formStudentId').value.trim();
+        const email = document.getElementById('formEmail').value.trim();
+        const phone = document.getElementById('formPhone').value.trim();
+        const hostel = document.getElementById('formHostel').value.trim();
+        const roomNumber = document.getElementById('formRoom').value.trim();
+        const password = document.getElementById('formPassword').value;
+
+        if (!name || !studentId || !email || !phone || !roomNumber) {
+          showToast('Please fill all required student information fields.', 'warning');
+          return;
+        }
+
+        saveStudentBtn.disabled = true;
+        saveStudentText.textContent = 'Saving...';
+        saveStudentSpinner.classList.remove('d-none');
+
+        try {
+          const payload = { name, studentId, email, phone, hostel, roomNumber };
+          if (password) payload.password = password;
+
+          if (id) {
+            await api.put(`/students/${id}`, payload);
+            showToast('Student details updated successfully.', 'success');
+          } else {
+            await api.post('/students', payload);
+            showToast('New student registered successfully.', 'success');
+          }
+
+          studentModal.close();
+          loadStudents();
+        } catch (err) {
+          showToast(err.message || 'Failed to save student.', 'error');
+        } finally {
+          saveStudentBtn.disabled = false;
+          saveStudentText.textContent = 'Save Student';
+          saveStudentSpinner.classList.add('d-none');
+        }
+      });
+
+      // Initial load
+      loadStudents();
+    });
+  </script>
+</body>
+</html>

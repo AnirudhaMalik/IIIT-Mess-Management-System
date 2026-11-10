@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Menu - IIIT Bhubaneswar Mess Portal</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">STUDENT PORTAL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Dining & Meals</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./menu.html" class="nav-item active"><span class="nav-icon">🍽️</span> <span>My Menu</span></a>
+        <a href="./qr-code.html" class="nav-item"><span class="nav-icon">📱</span> <span>My QR Code</span></a>
+        <a href="./attendance.html" class="nav-item"><span class="nav-icon">📅</span> <span>Meal Attendance</span></a>
+
+        <div class="nav-section-title">Finance & Plans</div>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">📋</span> <span>Subscriptions</span></a>
+        <a href="./payment.html" class="nav-item"><span class="nav-icon">💳</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Support & Account</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./notifications.html" class="nav-item"><span class="nav-icon">🔔</span> <span>Notifications</span></a>
+        <a href="./profile.html" class="nav-item"><span class="nav-icon">👤</span> <span>Profile</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Weekly Mess Menu</span>
+        </div>
+        <div class="topbar-right">
+          <a href="./notifications.html" class="notification-bell-btn" title="View Notifications">
+            <span>🔔</span>
+            <span class="notification-count-badge" style="display: none;">0</span>
+          </a>
+          <a href="./profile.html" class="user-profile-menu">
+            <div class="avatar-circle">ST</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Student</span>
+              <span class="user-role-label">Student</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dietary & Meal Schedule</h1>
+            <p class="page-subtitle">View daily nutritious meal distributions across breakfast, lunch, snacks, and dinner.</p>
+          </div>
+          <div class="d-flex items-center gap-12">
+            <span class="d-flex items-center gap-6 text-small font-medium">
+              <span class="food-type-icon veg"></span> Vegetarian
+            </span>
+            <span class="d-flex items-center gap-6 text-small font-medium">
+              <span class="food-type-icon non-veg"></span> Non-Vegetarian / Egg
+            </span>
+          </div>
+        </div>
+
+        <!-- Week Navigator -->
+        <div class="week-navigator">
+          <button class="btn btn-outline btn-sm" id="prevWeekBtn">&larr; Previous Week</button>
+          <div class="week-display" id="weekRangeDisplay">Loading Week...</div>
+          <button class="btn btn-outline btn-sm" id="nextWeekBtn">Next Week &rarr;</button>
+        </div>
+
+        <!-- Day Tabs (Mon - Sun) -->
+        <div class="day-tabs" id="dayTabsContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Selected Day's Meals -->
+        <div class="card mb-20">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title" id="selectedDateTitle">Menu Schedule</h2>
+              <div class="card-subtitle" id="selectedDateSubtitle">All dining hall counters</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="dayMealsContainer" class="meal-grid">
+              <!-- 4 Meal Cards loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Nutrition & Mess Policy Notice -->
+        <div class="demo-banner" style="background-color: var(--color-primary-light); border-color: var(--color-border); color: var(--color-secondary);">
+          <span>ℹ️ <strong>Mess Dining Rules:</strong> Special diets and sick-meal deliveries must be coordinated with the mess warden at least 2 hours prior to meal commencement. Valid digital QR token scanning is mandatory for entry.</span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('student');
+
+      let currentWeekStartDate = getMonday(new Date());
+      let selectedDate = new Date();
+
+      const prevWeekBtn = document.getElementById('prevWeekBtn');
+      const nextWeekBtn = document.getElementById('nextWeekBtn');
+      const weekRangeDisplay = document.getElementById('weekRangeDisplay');
+      const dayTabsContainer = document.getElementById('dayTabsContainer');
+      const dayMealsContainer = document.getElementById('dayMealsContainer');
+      const selectedDateTitle = document.getElementById('selectedDateTitle');
+      const selectedDateSubtitle = document.getElementById('selectedDateSubtitle');
+
+      prevWeekBtn.addEventListener('click', () => {
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() - 7);
+        selectedDate = new Date(currentWeekStartDate);
+        renderWeek();
+      });
+
+      nextWeekBtn.addEventListener('click', () => {
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7);
+        selectedDate = new Date(currentWeekStartDate);
+        renderWeek();
+      });
+
+      function getMonday(d) {
+        const date = new Date(d);
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(date.setDate(diff));
+      }
+
+      function renderWeek() {
+        const weekEnd = new Date(currentWeekStartDate);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+
+        weekRangeDisplay.textContent = `${helpers.formatDate(currentWeekStartDate)} – ${helpers.formatDate(weekEnd)}`;
+
+        // Render 7 Day Tabs
+        dayTabsContainer.innerHTML = '';
+        const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const todayStr = helpers.formatDateForInput(new Date());
+
+        for (let i = 0; i < 7; i++) {
+          const tabDate = new Date(currentWeekStartDate);
+          tabDate.setDate(tabDate.getDate() + i);
+          const tabDateStr = helpers.formatDateForInput(tabDate);
+          const isToday = tabDateStr === todayStr;
+          const isSelected = tabDateStr === helpers.formatDateForInput(selectedDate);
+
+          const btn = document.createElement('button');
+          btn.className = `day-tab-btn ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}`;
+          btn.innerHTML = `
+            <span class="day-name">${dayNames[i]}</span>
+            <span class="day-date">${tabDate.getDate()}</span>
+          `;
+          btn.addEventListener('click', () => {
+            selectedDate = tabDate;
+            renderWeek();
+          });
+          dayTabsContainer.appendChild(btn);
+        }
+
+        loadMenuForDate(selectedDate);
+      }
+
+      async function loadMenuForDate(date) {
+        const dateStr = helpers.formatDateForInput(date);
+        selectedDateTitle.textContent = `${date.toLocaleDateString('en-US', { weekday: 'long' })}, ${helpers.formatDate(date)}`;
+        selectedDateSubtitle.textContent = dateStr === helpers.formatDateForInput(new Date()) ? "Today's Active Schedule" : "Scheduled Dietary Plan";
+
+        showLoader(dayMealsContainer, 2);
+
+        try {
+          const res = await api.get('/menu', { date: dateStr });
+          const menuData = res.data || res;
+
+          hideLoader(dayMealsContainer);
+
+          const standardMeals = [
+            { type: 'breakfast', title: 'Breakfast', icon: '🌅', defaultTime: '7:30 AM - 9:30 AM' },
+            { type: 'lunch', title: 'Lunch', icon: '☀️', defaultTime: '12:30 PM - 2:30 PM' },
+            { type: 'snacks', title: 'Evening Snacks', icon: '☕', defaultTime: '5:00 PM - 6:30 PM' },
+            { type: 'dinner', title: 'Dinner', icon: '🌙', defaultTime: '8:00 PM - 10:00 PM' }
+          ];
+
+          const mealsFound = Array.isArray(menuData) ? menuData : (menuData && menuData.meals ? menuData.meals : []);
+
+          if (mealsFound.length === 0) {
+            dayMealsContainer.innerHTML = `
+              <div class="empty-state" style="grid-column: 1 / -1; padding: 40px 20px;">
+                <div class="empty-state-icon">🍽️</div>
+                <div class="empty-state-title">Menu not yet published for this date</div>
+                <p class="empty-state-desc">The mess catering staff will publish items soon. Please check back later or review neighboring dates.</p>
+              </div>
+            `;
+            return;
+          }
+
+          let cardsHtml = '';
+          standardMeals.forEach(meal => {
+            const currentMeal = mealsFound.find(m => (m.mealType || m.type || '').toLowerCase() === meal.type);
+            const items = currentMeal && currentMeal.items ? currentMeal.items : [];
+            const isSpecial = currentMeal && currentMeal.isSpecial;
+            const specialNote = currentMeal && currentMeal.specialNote;
+
+            let itemsList = '';
+            if (items.length > 0) {
+              items.forEach(it => {
+                const name = typeof it === 'string' ? it : it.name;
+                const isVeg = typeof it === 'object' ? it.isVeg !== false : true;
+                itemsList += `
+                  <li class="meal-item">
+                    <span class="food-type-icon ${isVeg ? 'veg' : 'non-veg'}"></span>
+                    <span>${name}</span>
+                  </li>
+                `;
+              });
+            } else {
+              itemsList = `<li class="text-muted text-small py-8">No specific items listed</li>`;
+            }
+
+            cardsHtml += `
+              <div class="meal-card">
+                <div class="meal-card-header">
+                  <div class="meal-title">
+                    <span>${meal.icon}</span>
+                    <span>${meal.title}</span>
+                  </div>
+                  ${isSpecial ? `<span class="badge badge-warning" title="${specialNote || 'Special feast meal'}">Special Feast</span>` : ''}
+                </div>
+                <div class="meal-time mb-12">${(currentMeal && currentMeal.timing) || meal.defaultTime}</div>
+                <ul class="meal-items-list">
+                  ${itemsList}
+                </ul>
+                ${specialNote ? `<div class="mt-12 text-small text-warning" style="font-style: italic;">* ${specialNote}</div>` : ''}
+              </div>
+            `;
+          });
+
+          dayMealsContainer.innerHTML = cardsHtml;
+
+        } catch (err) {
+          hideLoader(dayMealsContainer);
+          dayMealsContainer.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1;">
+              <div class="empty-state-icon">🍽️</div>
+              <div class="empty-state-title">Menu not yet published for this date</div>
+              <p class="empty-state-desc">No dietary records are available on server for ${helpers.formatDate(date)}.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Initial week load
+      renderWeek();
+    });
+  </script>
+</body>
+</html>

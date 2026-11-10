@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Attendance History - IIIT Bhubaneswar Mess Portal</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">STUDENT PORTAL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Dining & Meals</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>My Menu</span></a>
+        <a href="./qr-code.html" class="nav-item"><span class="nav-icon">📱</span> <span>My QR Code</span></a>
+        <a href="./attendance.html" class="nav-item active"><span class="nav-icon">📅</span> <span>Meal Attendance</span></a>
+
+        <div class="nav-section-title">Finance & Plans</div>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">📋</span> <span>Subscriptions</span></a>
+        <a href="./payment.html" class="nav-item"><span class="nav-icon">💳</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Support & Account</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./notifications.html" class="nav-item"><span class="nav-icon">🔔</span> <span>Notifications</span></a>
+        <a href="./profile.html" class="nav-item"><span class="nav-icon">👤</span> <span>Profile</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Meal Attendance Records</span>
+        </div>
+        <div class="topbar-right">
+          <a href="./notifications.html" class="notification-bell-btn" title="View Notifications">
+            <span>🔔</span>
+            <span class="notification-count-badge" style="display: none;">0</span>
+          </a>
+          <a href="./profile.html" class="user-profile-menu">
+            <div class="avatar-circle">ST</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Student</span>
+              <span class="user-role-label">Student</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dining Hall Attendance</h1>
+            <p class="page-subtitle">Track your verified meal entries recorded by the mess turnstile scanners.</p>
+          </div>
+        </div>
+
+        <!-- Summary Cards: 5 cards (Total, Breakfast, Lunch, Snacks, Dinner) -->
+        <div class="d-grid mb-24" style="grid-template-columns: repeat(5, 1fr); gap: 16px;">
+          <div class="stat-card">
+            <div class="stat-label">Total Meals</div>
+            <div class="stat-value" id="statTotalMeals">0</div>
+            <div class="stat-subtext">All periods</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Breakfast</div>
+            <div class="stat-value" id="statBreakfast">0</div>
+            <div class="stat-subtext">7:30 AM - 9:30 AM</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Lunch</div>
+            <div class="stat-value" id="statLunch">0</div>
+            <div class="stat-subtext">12:30 PM - 2:30 PM</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Snacks</div>
+            <div class="stat-value" id="statSnacks">0</div>
+            <div class="stat-subtext">5:00 PM - 6:30 PM</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Dinner</div>
+            <div class="stat-value" id="statDinner">0</div>
+            <div class="stat-subtext">8:00 PM - 10:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="card p-16 mb-20">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <div class="d-flex items-center gap-12 flex-wrap">
+              <label class="form-label m-0 text-small font-semibold">Filter Period:</label>
+              <button class="btn btn-sm btn-outline period-filter-btn" data-period="all">All Time</button>
+              <button class="btn btn-sm btn-outline period-filter-btn" data-period="month">This Month</button>
+              <button class="btn btn-sm btn-outline period-filter-btn active" data-period="week">This Week</button>
+            </div>
+
+            <div class="d-flex items-center gap-12 flex-wrap">
+              <div class="d-flex items-center gap-6">
+                <label for="startDateInput" class="text-small text-muted">From:</label>
+                <input type="date" id="startDateInput" class="form-control" style="width: auto; height: 32px; padding: 4px 8px; font-size: 13px;">
+              </div>
+              <div class="d-flex items-center gap-6">
+                <label for="endDateInput" class="text-small text-muted">To:</label>
+                <input type="date" id="endDateInput" class="form-control" style="width: auto; height: 32px; padding: 4px 8px; font-size: 13px;">
+              </div>
+              <button id="applyCustomFilterBtn" class="btn btn-sm btn-primary">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance Table Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Attendance Log</h2>
+            <div class="text-small text-muted" id="recordsCountText">0 records</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Meal Type</th>
+                    <th>Scan Time</th>
+                    <th>Dining Hall</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceTbody">
+                  <tr><td colspan="5" class="text-center text-muted py-24">Loading attendance records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="attendanceEmptyState" class="empty-state d-none">
+              <div class="empty-state-icon">📅</div>
+              <div class="empty-state-title">No meal records found</div>
+              <p class="empty-state-desc">No dining entries match the selected date range criteria.</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="paginationContainer" style="border-top: 1px solid var(--color-border); justify-content: space-between;">
+            <!-- Rendered by Pagination.render -->
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/pagination.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('student');
+
+      let currentPage = 1;
+      const limit = 10;
+      let activeFilter = 'week';
+      let customStartDate = '';
+      let customEndDate = '';
+
+      const attendanceTbody = document.getElementById('attendanceTbody');
+      const attendanceEmptyState = document.getElementById('attendanceEmptyState');
+      const recordsCountText = document.getElementById('recordsCountText');
+      const paginationContainer = document.getElementById('paginationContainer');
+
+      // Date inputs
+      const startDateInput = document.getElementById('startDateInput');
+      const endDateInput = document.getElementById('endDateInput');
+      const applyCustomFilterBtn = document.getElementById('applyCustomFilterBtn');
+
+      // Period filter buttons
+      document.querySelectorAll('.period-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.period-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.dataset.period;
+          customStartDate = '';
+          customEndDate = '';
+          startDateInput.value = '';
+          endDateInput.value = '';
+          currentPage = 1;
+          loadAttendance();
+        });
+      });
+
+      applyCustomFilterBtn.addEventListener('click', () => {
+        if (!startDateInput.value || !endDateInput.value) {
+          showToast('Please select both start and end dates.', 'warning');
+          return;
+        }
+        document.querySelectorAll('.period-filter-btn').forEach(b => b.classList.remove('active'));
+        activeFilter = 'custom';
+        customStartDate = startDateInput.value;
+        customEndDate = endDateInput.value;
+        currentPage = 1;
+        loadAttendance();
+      });
+
+      async function loadAttendance() {
+        attendanceTbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-24">Loading attendance records...</td></tr>`;
+        attendanceEmptyState.classList.add('d-none');
+
+        const params = {
+          page: currentPage,
+          limit
+        };
+
+        const now = new Date();
+        if (activeFilter === 'week') {
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(now.getDate() - 7);
+          params.startDate = helpers.formatDateForInput(oneWeekAgo);
+          params.endDate = helpers.formatDateForInput(now);
+        } else if (activeFilter === 'month') {
+          const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+          params.startDate = helpers.formatDateForInput(firstDay);
+          params.endDate = helpers.formatDateForInput(now);
+        } else if (activeFilter === 'custom') {
+          params.startDate = customStartDate;
+          params.endDate = customEndDate;
+        }
+
+        try {
+          const res = await api.get('/attendance/my-attendance', params);
+          const records = res.data || (Array.isArray(res) ? res : res.records || []);
+          const totalItems = res.total || res.totalRecords || (res.pagination && res.pagination.total) || records.length;
+          const totalPages = Math.ceil(totalItems / limit) || 1;
+
+          recordsCountText.textContent = `${totalItems} total scans`;
+
+          // Calculate summary counts from retrieved or full data
+          updateSummaryMetrics(records);
+
+          if (records.length === 0) {
+            attendanceTbody.innerHTML = '';
+            attendanceEmptyState.classList.remove('d-none');
+            paginationContainer.innerHTML = '';
+            return;
+          }
+
+          let html = '';
+          records.forEach(rec => {
+            const date = helpers.formatDate(rec.scanTime || rec.date || rec.createdAt);
+            const mealType = helpers.capitalize(rec.mealType || 'Meal');
+            const icon = helpers.getMealIcon(rec.mealType);
+            const time = new Date(rec.scanTime || rec.createdAt || rec.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+            const hall = rec.hall || rec.location || 'Mess Hall 1';
+            const statusClass = helpers.getStatusClass(rec.status || 'success');
+
+            html += `
+              <tr>
+                <td class="font-medium">${date}</td>
+                <td><span class="d-flex items-center gap-6">${icon} <span>${mealType}</span></span></td>
+                <td>${time}</td>
+                <td class="text-secondary">${hall}</td>
+                <td><span class="badge ${statusClass}">${helpers.capitalize(rec.status || 'Verified')}</span></td>
+              </tr>
+            `;
+          });
+
+          attendanceTbody.innerHTML = html;
+
+          // Render pagination
+          Pagination.render(paginationContainer, {
+            currentPage,
+            totalPages,
+            totalItems,
+            limit,
+            onPageChange: (newPage) => {
+              currentPage = newPage;
+              loadAttendance();
+            }
+          });
+
+        } catch (err) {
+          attendanceTbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-24">No attendance records found.</td></tr>`;
+          recordsCountText.textContent = '0 records';
+          paginationContainer.innerHTML = '';
+        }
+      }
+
+      function updateSummaryMetrics(records) {
+        let b = 0, l = 0, s = 0, d = 0;
+        records.forEach(r => {
+          const type = String(r.mealType || '').toLowerCase();
+          if (type.includes('breakfast')) b++;
+          else if (type.includes('lunch')) l++;
+          else if (type.includes('snack')) s++;
+          else if (type.includes('dinner')) d++;
+        });
+
+        document.getElementById('statTotalMeals').textContent = records.length;
+        document.getElementById('statBreakfast').textContent = b;
+        document.getElementById('statLunch').textContent = l;
+        document.getElementById('statSnacks').textContent = s;
+        document.getElementById('statDinner').textContent = d;
+      }
+
+      // Initial fetch
+      loadAttendance();
+    });
+  </script>
+</body>
+</html>

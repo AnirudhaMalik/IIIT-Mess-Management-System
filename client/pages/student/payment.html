@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment History - IIIT Bhubaneswar Mess Portal</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">STUDENT PORTAL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Dining & Meals</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>My Menu</span></a>
+        <a href="./qr-code.html" class="nav-item"><span class="nav-icon">📱</span> <span>My QR Code</span></a>
+        <a href="./attendance.html" class="nav-item"><span class="nav-icon">📅</span> <span>Meal Attendance</span></a>
+
+        <div class="nav-section-title">Finance & Plans</div>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">📋</span> <span>Subscriptions</span></a>
+        <a href="./payment.html" class="nav-item active"><span class="nav-icon">💳</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Support & Account</div>
+        <a href="./complaints.html" class="nav-item"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./notifications.html" class="nav-item"><span class="nav-icon">🔔</span> <span>Notifications</span></a>
+        <a href="./profile.html" class="nav-item"><span class="nav-icon">👤</span> <span>Profile</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Payment & Billing History</span>
+        </div>
+        <div class="topbar-right">
+          <a href="./notifications.html" class="notification-bell-btn" title="View Notifications">
+            <span>🔔</span>
+            <span class="notification-count-badge" style="display: none;">0</span>
+          </a>
+          <a href="./profile.html" class="user-profile-menu">
+            <div class="avatar-circle">ST</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Student</span>
+              <span class="user-role-label">Student</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <main class="content">
+        <!-- DEMO NOTICE AT TOP -->
+        <div class="demo-banner">
+          <span>⚠️ <strong>DEMO MODE:</strong> All transactions shown in this portal are educational mocks for IIIT Bhubaneswar Mess Management. No actual banking transfers take place.</span>
+        </div>
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Transaction Receipts</h1>
+            <p class="page-subtitle">Inspect historical payments, transaction identifiers, and verified receipts.</p>
+          </div>
+          <div class="card p-12 bg-white d-flex items-center gap-16" style="margin: 0;">
+            <div>
+              <div class="text-small text-muted font-medium">TOTAL PAID TO DATE</div>
+              <div class="font-bold text-primary" id="totalPaidDisplay" style="font-size: 22px;">₹0</div>
+            </div>
+            <a href="./subscriptions.html" class="btn btn-primary btn-sm">+ New Subscription</a>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="card p-16 mb-20">
+          <div class="d-flex items-center justify-between flex-wrap gap-16">
+            <div class="d-flex items-center gap-8">
+              <span class="text-small font-semibold text-secondary">Filter Status:</span>
+              <button class="btn btn-sm btn-outline status-btn active" data-status="all">All</button>
+              <button class="btn btn-sm btn-outline status-btn" data-status="success">Success</button>
+              <button class="btn btn-sm btn-outline status-btn" data-status="pending">Pending</button>
+              <button class="btn btn-sm btn-outline status-btn" data-status="failed">Failed</button>
+              <button class="btn btn-sm btn-outline status-btn" data-status="cancelled">Cancelled</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">All Transactions</h2>
+            <div class="text-small text-muted" id="txCountBadge">0 transactions</div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-container" style="border: none;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Transaction ID</th>
+                    <th>Plan Name</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTbody">
+                  <tr><td colspan="7" class="text-center text-muted py-24">Loading transactions...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="txEmptyState" class="empty-state d-none">
+              <div class="empty-state-icon">💳</div>
+              <div class="empty-state-title">No transactions found</div>
+              <p class="empty-state-desc">You do not have any recorded transactions matching this filter.</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="txPagination" style="border-top: 1px solid var(--color-border); justify-content: space-between;">
+            <!-- Rendered by Pagination.render -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Transaction Detail Modal -->
+  <div class="modal-backdrop" id="txnDetailModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Payment Receipt Details</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalTxnBody">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">
+          <span>🖨️</span> <span>Print Receipt</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/pagination.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('student');
+
+      let currentPage = 1;
+      const limit = 10;
+      let currentFilterStatus = 'all';
+      let transactionsCache = [];
+
+      const txTbody = document.getElementById('transactionsTbody');
+      const txEmptyState = document.getElementById('txEmptyState');
+      const txCountBadge = document.getElementById('txCountBadge');
+      const txPagination = document.getElementById('txPagination');
+      const totalPaidDisplay = document.getElementById('totalPaidDisplay');
+      const detailModal = helpers.setupModal('txnDetailModal');
+
+      // Status buttons
+      document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilterStatus = btn.dataset.status;
+          currentPage = 1;
+          renderTransactions();
+        });
+      });
+
+      async function fetchTransactions() {
+        try {
+          const res = await api.get('/payments/my');
+          transactionsCache = res.data || (Array.isArray(res) ? res : res.transactions || []);
+
+          // Calculate total paid
+          const totalPaid = transactionsCache
+            .filter(t => (t.status || 'success').toLowerCase() === 'success' || (t.status || '').toLowerCase() === 'paid')
+            .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+          totalPaidDisplay.textContent = helpers.formatCurrency(totalPaid);
+
+          renderTransactions();
+        } catch (e) {
+          txTbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-24">No transactions found.</td></tr>`;
+          txCountBadge.textContent = '0 transactions';
+        }
+      }
+
+      function renderTransactions() {
+        txEmptyState.classList.add('d-none');
+
+        let filtered = transactionsCache;
+        if (currentFilterStatus !== 'all') {
+          filtered = transactionsCache.filter(t => (t.status || '').toLowerCase() === currentFilterStatus);
+        }
+
+        txCountBadge.textContent = `${filtered.length} transactions`;
+
+        if (filtered.length === 0) {
+          txTbody.innerHTML = '';
+          txEmptyState.classList.remove('d-none');
+          txPagination.innerHTML = '';
+          return;
+        }
+
+        const totalPages = Math.ceil(filtered.length / limit) || 1;
+        const startIndex = (currentPage - 1) * limit;
+        const pagedData = filtered.slice(startIndex, startIndex + limit);
+
+        let html = '';
+        pagedData.forEach(tx => {
+          const id = tx.transactionId || tx.id || tx._id || 'TXN-000';
+          const planName = tx.planName || (tx.plan && tx.plan.name) || 'Mess Subscription Plan';
+          const amt = helpers.formatCurrency(tx.amount);
+          const method = helpers.capitalize(tx.paymentMethod || tx.method || 'UPI');
+          const status = tx.status || 'success';
+          const statusClass = helpers.getStatusClass(status);
+          const date = helpers.formatDateTime(tx.createdAt || tx.date || new Date());
+
+          html += `
+            <tr class="cursor-pointer" data-id="${id}">
+              <td><code>${id}</code></td>
+              <td class="font-medium">${planName}</td>
+              <td class="font-bold text-primary">${amt}</td>
+              <td>${method}</td>
+              <td><span class="badge ${statusClass}">${helpers.capitalize(status)}</span></td>
+              <td class="text-muted text-small">${date}</td>
+              <td>
+                <button class="btn btn-outline btn-sm view-detail-btn" data-tx='${JSON.stringify(tx)}'>
+                  View
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        txTbody.innerHTML = html;
+
+        // Attach modal clicks
+        txTbody.querySelectorAll('.view-detail-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tx = JSON.parse(btn.dataset.tx);
+            showReceiptModal(tx);
+          });
+        });
+
+        txTbody.querySelectorAll('tr').forEach(row => {
+          row.addEventListener('click', () => {
+            const btn = row.querySelector('.view-detail-btn');
+            if (btn) btn.click();
+          });
+        });
+
+        // Pagination
+        Pagination.render(txPagination, {
+          currentPage,
+          totalPages,
+          totalItems: filtered.length,
+          limit,
+          onPageChange: (newPage) => {
+            currentPage = newPage;
+            renderTransactions();
+          }
+        });
+      }
+
+      function showReceiptModal(tx) {
+        const id = tx.transactionId || tx.id || tx._id || 'TXN-000';
+        const planName = tx.planName || (tx.plan && tx.plan.name) || 'Mess Subscription Plan';
+        const amt = helpers.formatCurrency(tx.amount);
+        const method = helpers.capitalize(tx.paymentMethod || tx.method || 'Online');
+        const status = tx.status || 'success';
+        const statusClass = helpers.getStatusClass(status);
+        const date = helpers.formatDateTime(tx.createdAt || tx.date || new Date());
+        const user = Auth.getUser() || {};
+
+        const body = document.getElementById('modalTxnBody');
+        body.innerHTML = `
+          <div class="card bg-light p-16 mb-16 text-center" style="border: 1px solid var(--color-border);">
+            <div class="text-small text-muted font-medium mb-4">PAYMENT RECEIPT</div>
+            <div class="font-bold text-primary" style="font-size: 26px;">${amt}</div>
+            <div class="mt-8"><span class="badge ${statusClass}">${helpers.capitalize(status)}</span></div>
+          </div>
+
+          <div class="d-flex flex-col gap-12" style="font-size: 13px;">
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Transaction ID:</span>
+              <code>${id}</code>
+            </div>
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Student Name:</span>
+              <span class="font-semibold">${user.name || 'Student'}</span>
+            </div>
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Student ID / Roll:</span>
+              <span>${user.studentId || 'N/A'}</span>
+            </div>
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Purchased Plan:</span>
+              <span class="font-semibold">${planName}</span>
+            </div>
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Payment Channel:</span>
+              <span>${method}</span>
+            </div>
+            <div class="d-flex justify-between border-bottom pb-8">
+              <span class="text-muted">Timestamp:</span>
+              <span>${date}</span>
+            </div>
+            <div class="d-flex justify-between">
+              <span class="text-muted">Gateway Status:</span>
+              <span class="text-success font-semibold">Verified Electronic Payment</span>
+            </div>
+          </div>
+        `;
+
+        detailModal.open();
+      }
+
+      // Initial fetch
+      fetchTransactions();
+    });
+  </script>
+</body>
+</html>

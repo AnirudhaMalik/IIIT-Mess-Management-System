@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - IIIT Bhubaneswar Mess Management System</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="auth-page">
+    <!-- Left Hero / Brand Panel -->
+    <div class="auth-panel-left">
+      <div>
+        <div class="auth-brand-logo">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="4" fill="#FFFFFF"/>
+            <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#172B4D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M20 21V32" stroke="#172B4D" stroke-width="2.5"/>
+            <circle cx="20" cy="16" r="2.5" fill="#172B4D"/>
+          </svg>
+          <div>
+            <h3 style="color: #FFFFFF; margin: 0; font-size: 18px; font-weight: 700; letter-spacing: 0.5px;">IIIT BHUBANESWAR</h3>
+            <p style="color: #94a3b8; margin: 0; font-size: 11px; font-weight: 500; letter-spacing: 1px;">CENTRAL MESS PORTAL</p>
+          </div>
+        </div>
+
+        <h1 class="auth-hero-title">Automated Mess & Dining Management System</h1>
+        <p class="auth-hero-desc">
+          Official digital dining gateway for students, hostel residents, and mess committee members of IIIT Bhubaneswar.
+        </p>
+
+        <ul class="auth-features-list">
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Instant QR code verification at dining hall counters</span>
+          </li>
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Live weekly multi-meal dietary schedules and special menus</span>
+          </li>
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Digital meal plan subscriptions and transaction receipts</span>
+          </li>
+          <li class="auth-feature-item">
+            <span class="auth-feature-check">✓</span>
+            <span>Direct grievance redressal and dietary feedback tracking</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="auth-copyright">
+        &copy; 2026 International Institute of Information Technology, Bhubaneswar. All rights reserved.
+      </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-panel-right">
+      <div class="auth-form-container">
+        <div class="mb-24">
+          <h2 class="font-bold text-primary" style="font-size: 22px;">Sign in to your account</h2>
+          <p class="text-muted">Enter your institutional credentials to access your mess dashboard.</p>
+        </div>
+
+        <div id="loginAlert" class="demo-banner d-none" style="background-color: rgba(214, 69, 69, 0.1); border-color: var(--color-error); color: var(--color-error); margin-bottom: 16px;">
+          <span id="loginAlertText"></span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group" id="groupEmail">
+            <label class="form-label" for="email">
+              Email Address <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-control" 
+              placeholder="e.g. 2200001@iiitbbs.ac.in" 
+              required
+              autocomplete="email"
+            >
+            <div class="form-error" id="emailError">Please enter a valid institutional email.</div>
+          </div>
+
+          <div class="form-group" id="groupPassword">
+            <div class="form-label">
+              <label for="password" style="margin: 0;">Password <span class="required">*</span></label>
+              <a href="./forgot-password.html" class="text-small">Forgot Password?</a>
+            </div>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-control" 
+              placeholder="Enter your password" 
+              required
+              autocomplete="current-password"
+            >
+            <div class="form-error" id="passwordError">Password is required (minimum 6 characters).</div>
+          </div>
+
+          <div class="d-flex items-center justify-between mb-20">
+            <label class="form-checkbox">
+              <input type="checkbox" id="rememberMe">
+              <span class="text-secondary" style="font-size: 13px;">Remember this device</span>
+            </label>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary w-100" style="height: 40px;">
+            <span id="btnText">Sign In</span>
+            <div id="btnSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+          </button>
+        </form>
+
+        <div class="text-center mt-20">
+          <span class="text-muted" style="font-size: 13px;">Don't have an account?</span>
+          <a href="./register.html" class="font-semibold text-primary ml-1" style="font-size: 13px;"> Register here</a>
+        </div>
+
+        <!-- Demo Credentials Helper Box -->
+        <div class="demo-credentials-box">
+          <div class="demo-credentials-title">
+            <span>🔑</span> Demo Credentials (Click to Autofill)
+          </div>
+          <div class="demo-credentials-row">
+            <div><strong>Admin:</strong> admin@iiitbbs.ac.in</div>
+            <span class="demo-credential-click" id="fillAdmin">Use Admin</span>
+          </div>
+          <div class="demo-credentials-row">
+            <div><strong>Student:</strong> 2200001@iiitbbs.ac.in</div>
+            <span class="demo-credential-click" id="fillStudent">Use Student</span>
+          </div>
+          <div class="text-muted mt-8" style="font-size: 11px;">
+            Default password for both is <code>Admin@123</code> / <code>Student@123</code>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect to correct role dashboard
+      if (Auth.isAuthenticated()) {
+        Auth.redirectByRole();
+        return;
+      }
+
+      const form = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const loginAlert = document.getElementById('loginAlert');
+      const loginAlertText = document.getElementById('loginAlertText');
+
+      // Autofill clicks
+      document.getElementById('fillAdmin').addEventListener('click', () => {
+        emailInput.value = 'admin@iiitbbs.ac.in';
+        passwordInput.value = 'Admin@123';
+        clearErrors();
+      });
+
+      document.getElementById('fillStudent').addEventListener('click', () => {
+        emailInput.value = '2200001@iiitbbs.ac.in';
+        passwordInput.value = 'Student@123';
+        clearErrors();
+      });
+
+      function clearErrors() {
+        document.getElementById('groupEmail').classList.remove('has-error');
+        document.getElementById('groupPassword').classList.remove('has-error');
+        loginAlert.classList.add('d-none');
+      }
+
+      function setLoading(isLoading) {
+        if (isLoading) {
+          submitBtn.disabled = true;
+          btnText.textContent = 'Signing in...';
+          btnSpinner.classList.remove('d-none');
+        } else {
+          submitBtn.disabled = false;
+          btnText.textContent = 'Sign In';
+          btnSpinner.classList.add('d-none');
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        let hasError = false;
+        if (!email || !email.includes('@')) {
+          document.getElementById('groupEmail').classList.add('has-error');
+          hasError = true;
+        }
+        if (!password || password.length < 4) {
+          document.getElementById('groupPassword').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        setLoading(true);
+
+        try {
+          const res = await api.post('/auth/login', { email, password });
+          
+          // Format handles token & user
+          const token = res.token || (res.data && res.data.token);
+          const user = res.user || (res.data && res.data.user);
+
+          if (!token || !user) {
+            throw new Error('Invalid response structure received from authentication server.');
+          }
+
+          Auth.setToken(token);
+          Auth.setUser(user);
+
+          showToast('Login successful! Redirecting...', 'success', 1500);
+
+          setTimeout(() => {
+            Auth.redirectByRole();
+          }, 600);
+
+        } catch (err) {
+          setLoading(false);
+          const msg = err.message || 'Login failed. Please check your credentials.';
+          loginAlertText.textContent = msg;
+          loginAlert.classList.remove('d-none');
+          showToast(msg, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

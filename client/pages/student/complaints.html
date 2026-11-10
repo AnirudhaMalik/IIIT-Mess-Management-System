@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base target="_self">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grievance & Complaints - IIIT Bhubaneswar Mess Portal</title>
+  <link rel="stylesheet" href="../../assets/css/design-system.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-logo" width="32" height="32" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="4" fill="#172B4D"/>
+          <path d="M10 26V18L20 12L30 18V26L20 32L10 26Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 21V32" stroke="#FFFFFF" stroke-width="2.5"/>
+          <circle cx="20" cy="16" r="2.5" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="brand-title">IIIT BBS</div>
+          <div class="brand-subtitle">STUDENT PORTAL</div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-title">Dining & Meals</div>
+        <a href="./dashboard.html" class="nav-item"><span class="nav-icon">📊</span> <span>Dashboard</span></a>
+        <a href="./menu.html" class="nav-item"><span class="nav-icon">🍽️</span> <span>My Menu</span></a>
+        <a href="./qr-code.html" class="nav-item"><span class="nav-icon">📱</span> <span>My QR Code</span></a>
+        <a href="./attendance.html" class="nav-item"><span class="nav-icon">📅</span> <span>Meal Attendance</span></a>
+
+        <div class="nav-section-title">Finance & Plans</div>
+        <a href="./subscriptions.html" class="nav-item"><span class="nav-icon">📋</span> <span>Subscriptions</span></a>
+        <a href="./payment.html" class="nav-item"><span class="nav-icon">💳</span> <span>Payments</span></a>
+
+        <div class="nav-section-title">Support & Account</div>
+        <a href="./complaints.html" class="nav-item active"><span class="nav-icon">💬</span> <span>Complaints</span></a>
+        <a href="./notifications.html" class="nav-item"><span class="nav-icon">🔔</span> <span>Notifications</span></a>
+        <a href="./profile.html" class="nav-item"><span class="nav-icon">👤</span> <span>Profile</span></a>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-100 logout-trigger" style="justify-content: flex-start; gap: 8px;">
+          <span>🚪</span> <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" aria-label="Toggle Menu">☰</button>
+          <span class="institution-title">Mess Complaints & Grievance Redressal</span>
+        </div>
+        <div class="topbar-right">
+          <a href="./notifications.html" class="notification-bell-btn" title="View Notifications">
+            <span>🔔</span>
+            <span class="notification-count-badge" style="display: none;">0</span>
+          </a>
+          <a href="./profile.html" class="user-profile-menu">
+            <div class="avatar-circle">ST</div>
+            <div class="user-info-text">
+              <span class="user-display-name">Student</span>
+              <span class="user-role-label">Student</span>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dietary Grievances & Feedback</h1>
+            <p class="page-subtitle">File complaints regarding food quality, hygiene, or catering services directly to the mess committee.</p>
+          </div>
+        </div>
+
+        <div class="d-grid" style="grid-template-columns: 1fr 1.3fr; gap: 24px; align-items: start;">
+          <!-- Section 1: Submit New Complaint -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">File a New Complaint</h2>
+            </div>
+            <div class="card-body">
+              <form id="complaintForm" novalidate>
+                <div class="form-group" id="groupCategory">
+                  <label class="form-label" for="categorySelect">
+                    Grievance Category <span class="required">*</span>
+                  </label>
+                  <select id="categorySelect" name="category" class="form-control" required>
+                    <option value="">Select Category</option>
+                    <option value="Food Quality">Food Quality / Taste</option>
+                    <option value="Hygiene & Sanitation">Hygiene & Hall Sanitation</option>
+                    <option value="Portion Size">Portion Size / Shortage</option>
+                    <option value="Staff Behavior">Mess Staff Behavior</option>
+                    <option value="Dietary Preference">Dietary / Veg-NonVeg Segregation</option>
+                    <option value="Timing & Service">Meal Timing Delay</option>
+                    <option value="Other">Other Issues</option>
+                  </select>
+                  <div class="form-error">Please choose a category.</div>
+                </div>
+
+                <div class="form-group" id="groupDescription">
+                  <div class="form-label">
+                    <span>Description <span class="required">*</span></span>
+                    <span id="charCount" class="text-small text-muted">0 / 2000</span>
+                  </div>
+                  <textarea 
+                    id="descriptionInput" 
+                    name="description" 
+                    class="form-control" 
+                    placeholder="Provide specific details, including meal type, date, and description of the issue (min 10 characters)..." 
+                    minlength="10" 
+                    maxlength="2000" 
+                    required
+                  ></textarea>
+                  <div class="form-error">Description must be between 10 and 2000 characters.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="imageUpload">
+                    Supporting Photos (Optional, up to 3 images)
+                  </label>
+                  <input type="file" id="imageUpload" class="form-control" accept="image/*" multiple style="padding: 6px 12px; height: auto;">
+                  <span class="form-hint">Accepted formats: JPG, PNG, WEBP (Max 5MB each)</span>
+                </div>
+
+                <button type="submit" id="submitComplaintBtn" class="btn btn-primary w-100" style="height: 40px;">
+                  <span id="submitComplaintText">Submit Grievance</span>
+                  <div id="submitComplaintSpinner" class="spinner spinner-sm d-none" style="border-top-color: #FFFFFF;"></div>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Section 2: My Complaints List -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">My Filed Complaints</h2>
+              <div class="text-small text-muted" id="complaintsCountText">0 complaints</div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-container" style="border: none;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Admin Resolution</th>
+                    </tr>
+                  </thead>
+                  <tbody id="complaintsTbody">
+                    <tr><td colspan="4" class="text-center text-muted py-24">Loading complaints...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="complaintsEmptyState" class="empty-state d-none">
+                <div class="empty-state-icon">💬</div>
+                <div class="empty-state-title">No complaints filed</div>
+                <p class="empty-state-desc">You have no active or historical grievances on record.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Complaint Detail Modal -->
+  <div class="modal-backdrop" id="complaintDetailModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalCategoryTitle">Complaint Details</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modalComplaintBody">
+        <!-- Injected -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/services/api.js"></script>
+  <script src="../../assets/js/services/auth.js"></script>
+  <script src="../../assets/js/utils/toast.js"></script>
+  <script src="../../assets/js/utils/loader.js"></script>
+  <script src="../../assets/js/utils/helpers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await helpers.initLayout('student');
+
+      const form = document.getElementById('complaintForm');
+      const categorySelect = document.getElementById('categorySelect');
+      const descriptionInput = document.getElementById('descriptionInput');
+      const charCount = document.getElementById('charCount');
+      const imageUpload = document.getElementById('imageUpload');
+      const submitBtn = document.getElementById('submitComplaintBtn');
+      const submitText = document.getElementById('submitComplaintText');
+      const submitSpinner = document.getElementById('submitComplaintSpinner');
+      const complaintsTbody = document.getElementById('complaintsTbody');
+      const complaintsEmptyState = document.getElementById('complaintsEmptyState');
+      const complaintsCountText = document.getElementById('complaintsCountText');
+      const detailModal = helpers.setupModal('complaintDetailModal');
+
+      // Character counter
+      descriptionInput.addEventListener('input', () => {
+        const len = descriptionInput.value.length;
+        charCount.textContent = `${len} / 2000`;
+        if (len > 2000) {
+          charCount.style.color = 'var(--color-error)';
+        } else {
+          charCount.style.color = 'var(--color-text-secondary)';
+        }
+      });
+
+      // Submit Form
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.form-group').forEach(fg => fg.classList.remove('has-error'));
+
+        const category = categorySelect.value.trim();
+        const description = descriptionInput.value.trim();
+
+        let hasError = false;
+        if (!category) {
+          document.getElementById('groupCategory').classList.add('has-error');
+          hasError = true;
+        }
+        if (!description || description.length < 10) {
+          document.getElementById('groupDescription').classList.add('has-error');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        submitBtn.disabled = true;
+        submitText.textContent = 'Submitting...';
+        submitSpinner.classList.remove('d-none');
+
+        try {
+          const files = imageUpload.files;
+          let res;
+
+          if (files && files.length > 0) {
+            const formData = new FormData();
+            formData.append('category', category);
+            formData.append('description', description);
+            for (let i = 0; i < Math.min(files.length, 3); i++) {
+              formData.append('images', files[i]);
+            }
+            res = await api.post('/complaints', formData, true);
+          } else {
+            res = await api.post('/complaints', { category, description });
+          }
+
+          showToast('Complaint submitted successfully. Mess committee notified.', 'success');
+          form.reset();
+          charCount.textContent = '0 / 2000';
+          loadComplaints();
+
+        } catch (err) {
+          showToast(err.message || 'Failed to submit complaint.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitText.textContent = 'Submit Grievance';
+          submitSpinner.classList.add('d-none');
+        }
+      });
+
+      async function loadComplaints() {
+        try {
+          const res = await api.get('/complaints/my');
+          const complaints = res.data || (Array.isArray(res) ? res : []);
+
+          complaintsCountText.textContent = `${complaints.length} filed`;
+
+          if (complaints.length === 0) {
+            complaintsTbody.innerHTML = '';
+            complaintsEmptyState.classList.remove('d-none');
+            return;
+          }
+
+          complaintsEmptyState.classList.add('d-none');
+          let html = '';
+          complaints.forEach(c => {
+            const cat = c.category || 'General';
+            const status = c.status || 'pending';
+            const statusClass = helpers.getStatusClass(status);
+            const date = helpers.formatDate(c.createdAt || c.date || new Date());
+            const responseText = c.adminResponse || c.resolution || (status === 'resolved' ? 'Issue addressed' : 'Awaiting warden review');
+
+            html += `
+              <tr class="cursor-pointer complaint-row" data-complaint='${JSON.stringify(c)}'>
+                <td class="font-medium">${cat}</td>
+                <td><span class="badge ${statusClass}">${helpers.capitalize(status.replace('_', ' '))}</span></td>
+                <td class="text-muted text-small">${date}</td>
+                <td class="text-small" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                  ${responseText}
+                </td>
+              </tr>
+            `;
+          });
+
+          complaintsTbody.innerHTML = html;
+
+          complaintsTbody.querySelectorAll('.complaint-row').forEach(row => {
+            row.addEventListener('click', () => {
+              const comp = JSON.parse(row.dataset.complaint);
+              showComplaintDetails(comp);
+            });
+          });
+
+        } catch (e) {
+          complaintsTbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-20">Unable to load complaints.</td></tr>`;
+        }
+      }
+
+      function showComplaintDetails(comp) {
+        document.getElementById('modalCategoryTitle').textContent = comp.category || 'Complaint Details';
+        const modalBody = document.getElementById('modalComplaintBody');
+        const statusClass = helpers.getStatusClass(comp.status || 'pending');
+        const date = helpers.formatDateTime(comp.createdAt || comp.date || new Date());
+
+        modalBody.innerHTML = `
+          <div class="d-flex justify-between items-center mb-16">
+            <span class="badge ${statusClass}">${helpers.capitalize((comp.status || 'pending').replace('_', ' '))}</span>
+            <span class="text-small text-muted">${date}</span>
+          </div>
+
+          <div class="mb-16">
+            <h3 style="font-size: 13px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 6px;">Description</h3>
+            <div class="card bg-light p-12 text-secondary" style="white-space: pre-wrap; font-size: 14px; border: 1px solid var(--color-border); margin: 0;">
+              ${comp.description}
+            </div>
+          </div>
+
+          ${comp.adminResponse ? `
+            <div class="mb-16">
+              <h3 style="font-size: 13px; text-transform: uppercase; color: var(--color-success); margin-bottom: 6px;">Official Mess Committee Response</h3>
+              <div class="card p-12" style="background-color: rgba(22, 134, 90, 0.08); border: 1px solid var(--color-success); font-size: 14px; margin: 0;">
+                ${comp.adminResponse}
+              </div>
+            </div>
+          ` : `
+            <div class="card bg-light p-12 text-muted text-small text-center" style="margin: 0;">
+              Your grievance has been assigned to the mess supervisor and is under inspection.
+            </div>
+          `}
+        `;
+
+        detailModal.open();
+      }
+
+      // Initial load
+      loadComplaints();
+    });
+  </script>
+</body>
+</html>
