@@ -3,7 +3,8 @@
  * Base: http://localhost:5000/api/v1
  */
 
-const API_BASE = 'http://localhost:5000/api/v1';
+const API_BASE = window.APP_CONFIG?.API_BASE_URL ||
+  'http://localhost:5000/api/v1';
 
 const api = {
   /**
